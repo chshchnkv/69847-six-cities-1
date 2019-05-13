@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 
 const App = (props) => {
 
-  const {places = []} = props;
+  const {
+    places = [],
+    onPlaceClick = null
+  } = props;
 
   return (
     <div>
@@ -136,7 +139,7 @@ const App = (props) => {
                         </div>
                       </div>
                       <h2 className="place-card__name">
-                        <a href="#">{place}</a>
+                        <a href="#" onClick={onPlaceClick}>{place}</a>
                       </h2>
                       <p className="place-card__type">Apartment</p>
                     </div>
@@ -155,7 +158,8 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  places: PropTypes.arrayOf(PropTypes.string)
+  places: PropTypes.arrayOf(PropTypes.string),
+  onPlaceClick: PropTypes.func
 };
 
 export default App;
