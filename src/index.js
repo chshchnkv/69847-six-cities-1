@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/app/app";
+import {offers} from "./mocks/offers";
 
-const init = () => {
-  ReactDOM.render(<App places={[`Beautiful & luxurious apartment at great location`, `Wood and stone place`, `Canal View Prinsengracht`, `Nice, cozy, warm big bed apartment`]}/>, document.getElementById(`root`));
+const init = (offersList) => {
+  ReactDOM.render(<App offers={offersList}/>, document.getElementById(`root`));
 };
 
-init();
+init(offers);
