@@ -9,6 +9,8 @@ class OffersList extends PureComponent {
     this.state = {
       activeCard: -1
     };
+
+    this._handleCardHover = this._handleCardHover.bind(this);
   }
 
   render() {
@@ -20,15 +22,15 @@ class OffersList extends PureComponent {
 
     return (
       <div className="cities__places-list places__list tabs__content">
-        {offers.map((offer, i) => <PlaceCard key={i} place={offer} onImageClick={onImageClick} onTitleClick={onTitleClick} onCardHover={(id) => {
-          this.setState({
-            activeCard: id
-          }, () => {
-            // console.log(`active card: ${this.state.activeCard}`);
-          });
-        }}/>)}
+        {offers.map((offer, i) => <PlaceCard key={i} place={offer} onImageClick={onImageClick} onTitleClick={onTitleClick} onCardHover={this._handleCardHover}/>)}
       </div>
     );
+  }
+
+  _handleCardHover(id) {
+    this.setState({
+      activeCard: id
+    });
   }
 }
 
