@@ -33,7 +33,6 @@ const mock = {
 };
 
 it(`Map renders correctly`, () => {
-  const options = {};
-  const tree = renderer.create(<Map city={mock.city} zoom={mock.zoom} pins={mock.pins}/>, options);
+  const tree = renderer.create(<Map city={mock.city} zoom={mock.zoom} pins={mock.pins}/>);
   expect(tree).toMatchSnapshot();
 });

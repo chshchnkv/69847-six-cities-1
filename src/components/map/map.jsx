@@ -17,6 +17,7 @@ class Map extends React.PureComponent {
 
   componentDidMount() {
     const {
+      id = `map`,
       city,
       zoom,
       pins = []
@@ -27,7 +28,7 @@ class Map extends React.PureComponent {
       latitude
     } = city;
 
-    this._map = leaflet.map(this._mapRef.current, {
+    this._map = leaflet.map(id, {
       center: [longitude, latitude],
       zoom,
       zoomControl: false,
@@ -54,11 +55,13 @@ class Map extends React.PureComponent {
   }
 
   render() {
-    return <div ref={this._mapRef} style={{display: `flex`, width: 100 + `%`, height: 100 + `%`}}/>;
+    const {id = `map`} = this.props;
+    return <div id={id} style={{display: `flex`, width: 100 + `%`, height: 100 + `%`}}/>;
   }
 }
 
 Map.propTypes = {
+  id: PropTypes.string,
   city: PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number
