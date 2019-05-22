@@ -12,6 +12,10 @@ export const offers = [
     },
     type: AccommodationType.APARTMENT,
     rating: 3.2,
+    location: {
+      longitude: 52.3909553943508,
+      latitude: 4.85309666406198
+    },
   }, {
     id: 2,
     title: `Wood and stone place`,
@@ -23,6 +27,10 @@ export const offers = [
     },
     type: AccommodationType.HOUSE,
     rating: 2.8,
+    location: {
+      longitude: 52.369553943508,
+      latitude: 4.85309666406198
+    },
   }, {
     id: 3,
     title: `Canal View Prinsengracht`,
@@ -34,6 +42,10 @@ export const offers = [
     },
     type: AccommodationType.HOTEL,
     rating: 4.2,
+    location: {
+      longitude: 52.3909553943508,
+      latitude: 4.929309666406198
+    },
   }, {
     id: 4,
     title: `Nice, cozy, warm big bed apartment`,
@@ -44,6 +56,10 @@ export const offers = [
     },
     type: AccommodationType.APARTMENT,
     rating: 5,
+    location: {
+      longitude: 52.3809553943508,
+      latitude: 4.939309666406198
+    },
   }, {
     id: 5,
     title: `ibis Styles`,
@@ -55,5 +71,9 @@ export const offers = [
     },
     type: AccommodationType.HOTEL,
     rating: 1,
+    location: {
+      longitude: 52.3809553943508,
+      latitude: 4.929309666406198
+    },
   },
 ];

@@ -2,6 +2,7 @@ import React from "react";
 import OffersList from "../offers-list/offers-list";
 import PropTypes from "prop-types";
 import {AccommodationType} from "../../data";
+import Map from "../map/map";
 
 const MainPage = (props) => {
   const {
@@ -72,7 +73,9 @@ const MainPage = (props) => {
             <OffersList offers={offers} onTitleClick={onPlaceTitleClick} onImageClick={onPlaceImageClick}/>
           </section>
           <div className="cities__right-section">
-            <section className="cities__map map"></section>
+            <section className="cities__map map">
+              <Map city={{longitude: 52.38333, latitude: 4.9}} pins={offers.map((offer) => offer.location)} zoom={12}/>
+            </section>
           </div>
         </div>
       </div>
@@ -92,6 +95,10 @@ MainPage.propTypes = {
     }),
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
+    location: PropTypes.shape({
+      longitude: PropTypes.number,
+      latitude: PropTypes.number
+    })
   })).isRequired,
   onPlaceTitleClick: PropTypes.func,
   onPlaceImageClick: PropTypes.func

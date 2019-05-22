@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Map renders correctly 1`] = `
+<div
+  id="map"
+  style={
+    Object {
+      "display": "flex",
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+/>
+`;
