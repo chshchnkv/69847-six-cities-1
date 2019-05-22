@@ -17,7 +17,7 @@ class Map extends React.PureComponent {
 
   componentDidMount() {
     const {
-      id = `map`,
+      id,
       city,
       zoom,
       pins = []
@@ -55,10 +55,14 @@ class Map extends React.PureComponent {
   }
 
   render() {
-    const {id = `map`} = this.props;
+    const {id} = this.props;
     return <div id={id} style={{display: `flex`, width: 100 + `%`, height: 100 + `%`}}/>;
   }
 }
+
+Map.defaultProps = {
+  id: `map`
+};
 
 Map.propTypes = {
   id: PropTypes.string,
