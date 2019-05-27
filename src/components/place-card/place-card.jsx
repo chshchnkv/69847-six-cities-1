@@ -1,9 +1,9 @@
-import React, {PureComponent} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {AccommodationType, PeriodType} from "../../data";
 import {ratingToPercent} from "../../utils";
 
-class PlaceCard extends PureComponent {
+class PlaceCard extends React.PureComponent {
   constructor(props) {
     super(props);
 

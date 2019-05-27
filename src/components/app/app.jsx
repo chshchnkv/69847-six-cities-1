@@ -1,38 +1,25 @@
-import React, {PureComponent} from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import {AccommodationType} from "../../data";
+import {AccommodationType, PeriodType} from "../../data";
 import MainPage from "../main-page/main-page";
+import {Action, ActionCreator} from "../../reducer";
+import {connect} from "react-redux";
+import CityList from "../city-list/city-list";
+import {getCitiesFromOffers, getCityInfoByName} from "../../utils";
 
-class App extends PureComponent {
-
-  static _getScreen(props) {
+class App extends React.Component {
+  render() {
     const {
       offers,
+      currentCity,
+      currentCityOffers,
       onPlaceTitleClick,
       onPlaceImageClick,
-    } = props;
-    return (<MainPage offers={offers} onPlaceImageClick={onPlaceImageClick} onPlaceTitleClick={onPlaceTitleClick}/>);
-  }
+      onChangeCity,
+    } = this.props;
 
-  render() {
     return (
-      <div>
-        <div style={{display: `none`}}>
-          <svg xmlns="http://www.w3.org/2000/svg">
-            <symbol id="icon-arrow-select" viewBox="0 0 7 4">
-              <path fillRule="evenodd" clipRule="evenodd" d="M0 0l3.5 2.813L7 0v1.084L3.5 4 0 1.084V0z"></path>
-            </symbol>
-            <symbol id="icon-bookmark" viewBox="0 0 17 18">
-              <path
-                d="M3.993 2.185l.017-.092V2c0-.554.449-1 .99-1h10c.522 0 .957.41.997.923l-2.736 14.59-4.814-2.407-.39-.195-.408.153L1.31 16.44 3.993 2.185z"></path>
-            </symbol>
-            <symbol id="icon-star" viewBox="0 0 13 12">
-              <path fillRule="evenodd" clipRule="evenodd"
-                d="M6.5 9.644L10.517 12 9.451 7.56 13 4.573l-4.674-.386L6.5 0 4.673 4.187 0 4.573 3.549 7.56 2.483 12 6.5 9.644z"></path>
-            </symbol>
-          </svg>
-        </div>
-
+      <React.Fragment>
         <header className="header">
           <div className="container">
             <div className="header__wrapper">
@@ -56,14 +43,25 @@ class App extends PureComponent {
           </div>
         </header>
 
-        {App._getScreen(this.props)}
+        <main className="page__main page__main--index">
+          <h1 className="visually-hidden">Cities</h1>
+          <div className="cities tabs">
+            <section className="locations container">
+              <CityList cities={getCitiesFromOffers(offers)} activeCity={currentCity} onChangeCity={onChangeCity}/>
+            </section>
+          </div>
 
-      </div>
+          <MainPage city={getCityInfoByName(currentCity)} offers={currentCityOffers} onPlaceImageClick={onPlaceImageClick} onPlaceTitleClick={onPlaceTitleClick}/>
+
+        </main>
+      </React.Fragment>
     );
   }
 }
 
 App.propTypes = {
+  currentCity: PropTypes.string.isRequired,
+  currentCityOffers: PropTypes.array.isRequired,
   offers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -71,13 +69,32 @@ App.propTypes = {
     rating: PropTypes.number,
     price: PropTypes.shape({
       value: PropTypes.number,
-      period: PropTypes.oneOf([`night`])
+      period: PropTypes.oneOf([...Object.values(PeriodType)])
     }),
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
+    location: PropTypes.shape({
+      city: PropTypes.string.isRequired,
+      longitude: PropTypes.number.isRequired,
+      latitude: PropTypes.number.isRequired
+    })
   })).isRequired,
   onPlaceTitleClick: PropTypes.func,
-  onPlaceImageClick: PropTypes.func
+  onPlaceImageClick: PropTypes.func,
+  onChangeCity: PropTypes.func
 };
 
-export default App;
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  currentCity: state.city,
+  currentCityOffers: state.offers.slice(0)
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onChangeCity: (city) => {
+    dispatch(ActionCreator[Action.CHANGE_CITY](city));
+    dispatch(ActionCreator[Action.REQUEST_OFFERS](city));
+  }
+});
+
+export {App};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

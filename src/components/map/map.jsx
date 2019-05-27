@@ -6,8 +6,6 @@ class Map extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._mapRef = React.createRef();
-
     this._icon = leaflet.icon({
       iconUrl: `img/pin.svg`,
       iconSize: [30, 30]
@@ -19,11 +17,11 @@ class Map extends React.PureComponent {
     const {
       id,
       city,
-      zoom,
       pins = []
     } = this.props;
 
     const {
+      zoom,
       longitude,
       latitude
     } = city;
@@ -50,6 +48,28 @@ class Map extends React.PureComponent {
     });
   }
 
+  componentDidUpdate() {
+    const {
+      city,
+      pins = []
+    } = this.props;
+
+    const {
+      zoom,
+      longitude,
+      latitude
+    } = city;
+
+    this._map.setView([longitude, latitude], zoom);
+
+    pins.forEach((pin) => {
+      const offerCords = [pin.longitude, pin.latitude];
+      leaflet
+        .marker(offerCords, {icon: this._icon})
+        .addTo(this._map);
+    });
+  }
+
   componentWillUnmount() {
     this._map = null;
   }
@@ -67,10 +87,11 @@ Map.defaultProps = {
 Map.propTypes = {
   id: PropTypes.string,
   city: PropTypes.shape({
+    title: PropTypes.string,
     longitude: PropTypes.number,
-    latitude: PropTypes.number
+    latitude: PropTypes.number,
+    zoom: PropTypes.number,
   }).isRequired,
-  zoom: PropTypes.number.isRequired,
   pins: PropTypes.arrayOf(PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number,
