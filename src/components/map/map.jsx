@@ -11,6 +11,7 @@ class Map extends React.PureComponent {
       iconSize: [30, 30]
     });
 
+    this._pinLayers = [];
   }
 
   componentDidMount() {
@@ -40,19 +41,12 @@ class Map extends React.PureComponent {
       })
       .addTo(this._map);
 
-    pins.forEach((pin) => {
-      const offerCords = [pin.longitude, pin.latitude];
-      leaflet
-        .marker(offerCords, {icon: this._icon})
-        .addTo(this._map);
-    });
+    this._createPins();
+    this._panZoom();
   }
 
   componentDidUpdate() {
-    const {
-      city,
-      pins = []
-    } = this.props;
+    const {city} = this.props;
 
     const {
       zoom,
@@ -62,12 +56,9 @@ class Map extends React.PureComponent {
 
     this._map.setView([longitude, latitude], zoom);
 
-    pins.forEach((pin) => {
-      const offerCords = [pin.longitude, pin.latitude];
-      leaflet
-        .marker(offerCords, {icon: this._icon})
-        .addTo(this._map);
-    });
+    this._clearPins();
+    this._createPins();
+    this._panZoom();
   }
 
   componentWillUnmount() {
@@ -77,6 +68,28 @@ class Map extends React.PureComponent {
   render() {
     const {id} = this.props;
     return <div id={id} style={{display: `flex`, width: 100 + `%`, height: 100 + `%`}}/>;
+  }
+
+  _clearPins() {
+    this._pinLayers.forEach((pinLayer) => {
+      this._map.removeLayer(pinLayer);
+    });
+  }
+
+  _createPins() {
+    const {pins} = this.props;
+    this._pinLayers = pins.map((pin) => {
+      const offerCords = [pin.longitude, pin.latitude];
+      return leaflet
+        .marker(offerCords, {icon: this._icon})
+        .addTo(this._map);
+    });
+  }
+
+  _panZoom() {
+    const latLngs = this._pinLayers.map((pinLayer) => pinLayer.getLatLng());
+    const bounds = leaflet.latLngBounds(latLngs);
+    this._map.fitBounds(bounds);
   }
 }
 
