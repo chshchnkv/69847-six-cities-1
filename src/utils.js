@@ -1,4 +1,5 @@
-import {Cities, MAX_RATING_IN_STARS} from "./data";
+import {MAX_RATING_IN_STARS} from "./data";
+import {Cities} from "./mocks/cities";
 
 export const ratingToPercent = (rating) => Math.round(rating) / MAX_RATING_IN_STARS * 100;
 
