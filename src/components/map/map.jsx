@@ -17,8 +17,7 @@ class Map extends React.PureComponent {
   componentDidMount() {
     const {
       id,
-      city,
-      pins = []
+      city
     } = this.props;
 
     const {
