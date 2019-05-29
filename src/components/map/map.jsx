@@ -6,24 +6,22 @@ class Map extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._mapRef = React.createRef();
-
     this._icon = leaflet.icon({
       iconUrl: `img/pin.svg`,
       iconSize: [30, 30]
     });
 
+    this._pinLayers = [];
   }
 
   componentDidMount() {
     const {
       id,
-      city,
-      zoom,
-      pins = []
+      city
     } = this.props;
 
     const {
+      zoom,
       longitude,
       latitude
     } = city;
@@ -42,12 +40,24 @@ class Map extends React.PureComponent {
       })
       .addTo(this._map);
 
-    pins.forEach((pin) => {
-      const offerCords = [pin.longitude, pin.latitude];
-      leaflet
-        .marker(offerCords, {icon: this._icon})
-        .addTo(this._map);
-    });
+    this._createPins();
+    this._panZoom();
+  }
+
+  componentDidUpdate() {
+    const {city} = this.props;
+
+    const {
+      zoom,
+      longitude,
+      latitude
+    } = city;
+
+    this._map.setView([longitude, latitude], zoom);
+
+    this._clearPins();
+    this._createPins();
+    this._panZoom();
   }
 
   componentWillUnmount() {
@@ -58,6 +68,28 @@ class Map extends React.PureComponent {
     const {id} = this.props;
     return <div id={id} style={{display: `flex`, width: 100 + `%`, height: 100 + `%`}}/>;
   }
+
+  _clearPins() {
+    this._pinLayers.forEach((pinLayer) => {
+      this._map.removeLayer(pinLayer);
+    });
+  }
+
+  _createPins() {
+    const {pins} = this.props;
+    this._pinLayers = pins.map((pin) => {
+      const offerCords = [pin.longitude, pin.latitude];
+      return leaflet
+        .marker(offerCords, {icon: this._icon})
+        .addTo(this._map);
+    });
+  }
+
+  _panZoom() {
+    const latLngs = this._pinLayers.map((pinLayer) => pinLayer.getLatLng());
+    const bounds = leaflet.latLngBounds(latLngs);
+    this._map.fitBounds(bounds);
+  }
 }
 
 Map.defaultProps = {
@@ -67,10 +99,11 @@ Map.defaultProps = {
 Map.propTypes = {
   id: PropTypes.string,
   city: PropTypes.shape({
+    title: PropTypes.string,
     longitude: PropTypes.number,
-    latitude: PropTypes.number
+    latitude: PropTypes.number,
+    zoom: PropTypes.number,
   }).isRequired,
-  zoom: PropTypes.number.isRequired,
   pins: PropTypes.arrayOf(PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number,

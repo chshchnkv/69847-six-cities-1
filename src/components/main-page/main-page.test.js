@@ -16,6 +16,7 @@ const mock = [
     type: AccommodationType.APARTMENT,
     rating: 3.2,
     location: {
+      city: `Amsterdam`,
       longitude: 52.3909553943508,
       latitude: 4.85309666406198
     },
@@ -31,6 +32,7 @@ const mock = [
     type: AccommodationType.HOUSE,
     rating: 2.8,
     location: {
+      city: `Amsterdam`,
       longitude: 52.369553943508,
       latitude: 4.85309666406198
     },
@@ -46,6 +48,7 @@ const mock = [
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
+      city: `Amsterdam`,
       longitude: 52.3909553943508,
       latitude: 4.929309666406198
     },
@@ -60,6 +63,7 @@ const mock = [
     type: AccommodationType.APARTMENT,
     rating: 5,
     location: {
+      city: `Amsterdam`,
       longitude: 52.3809553943508,
       latitude: 4.939309666406198
     },
@@ -75,13 +79,21 @@ const mock = [
     type: AccommodationType.HOTEL,
     rating: 1,
     location: {
+      city: `Amsterdam`,
       longitude: 52.3809553943508,
       latitude: 4.929309666406198
     },
   },
 ];
 
+const cityMock = {
+  title: `Amsterdam`,
+  longitude: 52.38333,
+  latitude: 4.9,
+  zoom: 12,
+};
+
 it(`Main page renders correctly`, () => {
-  const tree = renderer.create(<MainPage offers={mock}/>);
+  const tree = renderer.create(<MainPage offers={mock} city={cityMock}/>);
   expect(tree).toMatchSnapshot();
 });

@@ -3,6 +3,7 @@ export const AccommodationType = {
   ROOM: `room`,
   HOUSE: `house`,
   HOTEL: `hotel`,
+  HOSTEL: `hostel`,
 };
 
 export const PeriodType = {
