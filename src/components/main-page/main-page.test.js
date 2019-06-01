@@ -16,7 +16,7 @@ const mock = [
     type: AccommodationType.APARTMENT,
     rating: 3.2,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3909553943508,
       latitude: 4.85309666406198
     },
@@ -32,7 +32,7 @@ const mock = [
     type: AccommodationType.HOUSE,
     rating: 2.8,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.369553943508,
       latitude: 4.85309666406198
     },
@@ -48,7 +48,7 @@ const mock = [
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3909553943508,
       latitude: 4.929309666406198
     },
@@ -63,7 +63,7 @@ const mock = [
     type: AccommodationType.APARTMENT,
     rating: 5,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3809553943508,
       latitude: 4.939309666406198
     },
@@ -79,7 +79,7 @@ const mock = [
     type: AccommodationType.HOTEL,
     rating: 1,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3809553943508,
       latitude: 4.929309666406198
     },
@@ -87,6 +87,7 @@ const mock = [
 ];
 
 const cityMock = {
+  id: 1,
   title: `Amsterdam`,
   longitude: 52.38333,
   latitude: 4.9,
@@ -94,6 +95,7 @@ const cityMock = {
 };
 
 it(`Main page renders correctly`, () => {
-  const tree = renderer.create(<MainPage offers={mock} city={cityMock}/>);
+  const onSelectOffer = jest.fn();
+  const tree = renderer.create(<MainPage offers={mock} cityId={cityMock.id} onSelectOffer={onSelectOffer}/>);
   expect(tree).toMatchSnapshot();
 });

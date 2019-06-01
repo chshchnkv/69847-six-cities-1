@@ -13,7 +13,7 @@ export const offers = [
     type: AccommodationType.APARTMENT,
     rating: 3.2,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3909553943508,
       latitude: 4.85309666406198
     },
@@ -29,7 +29,7 @@ export const offers = [
     type: AccommodationType.HOUSE,
     rating: 2.8,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.369553943508,
       latitude: 4.85309666406198
     },
@@ -45,7 +45,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3909553943508,
       latitude: 4.929309666406198
     },
@@ -60,7 +60,7 @@ export const offers = [
     type: AccommodationType.APARTMENT,
     rating: 5,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3809553943508,
       latitude: 4.939309666406198
     },
@@ -76,7 +76,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 1,
     location: {
-      city: `Amsterdam`,
+      city: 1,
       longitude: 52.3809553943508,
       latitude: 4.929309666406198
     },
@@ -92,7 +92,7 @@ export const offers = [
     type: AccommodationType.HOSTEL,
     rating: 4.3,
     location: {
-      city: `Paris`,
+      city: 2,
       longitude: 48.8839479,
       latitude: 2.3421239
     },
@@ -108,7 +108,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.1,
     location: {
-      city: `Paris`,
+      city: 2,
       longitude: 48.884579,
       latitude: 2.349087
     },
@@ -124,7 +124,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.3,
     location: {
-      city: `Paris`,
+      city: 2,
       longitude: 48.882872,
       latitude: 2.342178
     },
@@ -140,7 +140,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.5,
     location: {
-      city: `Paris`,
+      city: 2,
       longitude: 48.886555,
       latitude: 2.335414
     },
@@ -156,7 +156,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.2,
     location: {
-      city: `Cologne`,
+      city: 3,
       longitude: 50.939567,
       latitude: 6.958203
     },
@@ -172,7 +172,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
-      city: `Cologne`,
+      city: 3,
       longitude: 50.935694,
       latitude: 6.971236
     },
@@ -188,7 +188,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.4,
     location: {
-      city: `Cologne`,
+      city: 3,
       longitude: 50.940278,
       latitude: 6.950829
     },
@@ -204,7 +204,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.5,
     location: {
-      city: `Cologne`,
+      city: 3,
       longitude: 50.939105,
       latitude: 6.959495
     },
@@ -220,7 +220,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.7,
     location: {
-      city: `Brussels`,
+      city: 4,
       longitude: 50.846148,
       latitude: 4.353535
     },
@@ -236,7 +236,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.5,
     location: {
-      city: `Brussels`,
+      city: 4,
       longitude: 50.843005,
       latitude: 4.346411
     },
@@ -252,7 +252,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.3,
     location: {
-      city: `Brussels`,
+      city: 4,
       longitude: 50.845984,
       latitude: 4.370445
     },
@@ -268,7 +268,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
-      city: `Hamburg`,
+      city: 5,
       longitude: 53.549848,
       latitude: 9.985613
     },
@@ -284,7 +284,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
-      city: `Hamburg`,
+      city: 5,
       longitude: 53.556911,
       latitude: 10.015859
     },
@@ -300,7 +300,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.4,
     location: {
-      city: `Hamburg`,
+      city: 5,
       longitude: 53.546423,
       latitude: 10.014009
     },
@@ -316,7 +316,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 4.5,
     location: {
-      city: `Dusseldorf`,
+      city: 6,
       longitude: 51.229145,
       latitude: 6.774576
     },
@@ -332,7 +332,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.9,
     location: {
-      city: `Dusseldorf`,
+      city: 6,
       longitude: 51.232693,
       latitude: 6.746081
     },
@@ -348,7 +348,7 @@ export const offers = [
     type: AccommodationType.HOTEL,
     rating: 3.8,
     location: {
-      city: `Dusseldorf`,
+      city: 6,
       longitude: 51.235152,
       latitude: 6.816212
     },
@@ -364,7 +364,7 @@ export const offers = [
     type: AccommodationType.HOSTEL,
     rating: 4.1,
     location: {
-      city: `Dusseldorf`,
+      city: 6,
       longitude: 51.260962,
       latitude: 6.872934
     },

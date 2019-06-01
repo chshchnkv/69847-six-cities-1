@@ -3,27 +3,38 @@ import OffersList from "../offers-list/offers-list";
 import PropTypes from "prop-types";
 import {AccommodationType} from "../../data";
 import Map from "../map/map";
+import {getCityInfoById} from "../../utils";
+import withActiveItem from "../../hocs/with-active-item/with-active-item";
+import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
+
+const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
+  Object.assign({}, props, {
+    onImageClick: props.onChangeActiveItem
+  })
+))(OffersList));
 
 const MainPage = (props) => {
   const {
-    city,
+    cityId,
     offers,
-    onPlaceTitleClick,
-    onPlaceImageClick
+    offerId,
+    onSelectOffer
   } = props;
+
+  const {title} = getCityInfoById(cityId);
 
   return (
     <div className="cities__places-wrapper">
       <div className="cities__places-container container">
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
-          <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {city.title}</b>
+          <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {title}</b>
           <form className="places__sorting" action="#" method="get">
             <span className="places__sorting-caption">Sort by</span>
             <span className="places__sorting-type" tabIndex="0">
               Popular
               <svg className="places__sorting-arrow" width="7" height="4">
-                <use xlinkHref="#icon-arrow-select"></use>
+                <use xlinkHref="#icon-arrow-select"/>
               </svg>
             </span>
             <ul className="places__options places__options--custom places__options--opened">
@@ -33,11 +44,11 @@ const MainPage = (props) => {
               <li className="places__option" tabIndex="0">Top rated first</li>
             </ul>
           </form>
-          <OffersList offers={offers} onTitleClick={onPlaceTitleClick} onImageClick={onPlaceImageClick}/>
+          <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
         </section>
         <div className="cities__right-section">
           <section className="cities__map map">
-            <Map city={city} pins={offers.map((offer) => offer.location)}/>
+            <Map cityId={cityId} pins={offers.map((offer) => offer.location)} activePin={offers.findIndex((offer) => offer.id === offerId)}/>
           </section>
         </div>
       </div>
@@ -46,12 +57,7 @@ const MainPage = (props) => {
 };
 
 MainPage.propTypes = {
-  city: PropTypes.shape({
-    title: PropTypes.string,
-    longitude: PropTypes.number,
-    latitude: PropTypes.number,
-    zoom: PropTypes.number,
-  }),
+  cityId: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -64,12 +70,13 @@ MainPage.propTypes = {
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
     location: PropTypes.shape({
+      city: PropTypes.number,
       longitude: PropTypes.number,
       latitude: PropTypes.number
     })
   })).isRequired,
-  onPlaceTitleClick: PropTypes.func,
-  onPlaceImageClick: PropTypes.func
+  onSelectOffer: PropTypes.func.isRequired,
+  offerId: PropTypes.number
 };
 
 export default MainPage;

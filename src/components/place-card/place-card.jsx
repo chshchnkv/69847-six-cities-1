@@ -7,7 +7,6 @@ class PlaceCard extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._handleCardHover = this._handleCardHover.bind(this);
     this._handleCardTitleClick = this._handleCardTitleClick.bind(this);
     this._handleCardImageClick = this._handleCardImageClick.bind(this);
   }
@@ -33,7 +32,7 @@ class PlaceCard extends React.PureComponent {
     } = price;
 
     return (
-      <article className="cities__place-card place-card" onMouseEnter={this._handleCardHover}>
+      <article className="cities__place-card place-card">
         {isPremium
           ? <div className="place-card__mark"><span>Premium</span></div>
           : null}
@@ -69,19 +68,6 @@ class PlaceCard extends React.PureComponent {
         </div>
       </article>
     );
-  }
-
-  _handleCardHover() {
-    const {
-      place,
-      onCardHover
-    } = this.props;
-
-    const {
-      id
-    } = place;
-
-    onCardHover(id);
   }
 
   _handleCardTitleClick(event) {
@@ -128,7 +114,6 @@ PlaceCard.propTypes = {
   }).isRequired,
   onTitleClick: PropTypes.func,
   onImageClick: PropTypes.func,
-  onCardHover: PropTypes.func
 };
 
 export default PlaceCard;

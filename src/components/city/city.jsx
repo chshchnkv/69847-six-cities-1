@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-class City extends React.Component {
+class City extends React.PureComponent {
   constructor(props) {
     super(props);
     this._handleClick = this._handleClick.bind(this);
@@ -21,15 +21,16 @@ class City extends React.Component {
 
   _handleClick(event) {
     const {
-      title,
+      id,
       onActivateCity
     } = this.props;
     event.preventDefault();
-    onActivateCity(title);
+    onActivateCity(id);
   }
 }
 
 City.propTypes = {
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   longitude: PropTypes.number.isRequired,
   latitude: PropTypes.number.isRequired,
