@@ -4,6 +4,7 @@ import Map from "./map";
 
 const mock = {
   city: {
+    id: 1,
     title: `Amsterdam`,
     zoom: 12,
     longitude: 52.38333,
@@ -34,6 +35,6 @@ const mock = {
 };
 
 it(`Map renders correctly`, () => {
-  const tree = renderer.create(<Map city={mock.city} pins={mock.pins}/>);
+  const tree = renderer.create(<Map cityId={mock.city.id} pins={mock.pins}/>);
   expect(tree).toMatchSnapshot();
 });

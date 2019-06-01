@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import * as leaflet from "leaflet";
-import {getCityInfoById, getOfferById} from "../../utils";
+import {getCityInfoById} from "../../utils";
 
 class Map extends React.PureComponent {
   constructor(props) {
