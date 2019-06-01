@@ -6,9 +6,9 @@ const withActiveItem = (Component) => {
     constructor(props) {
       super(props);
 
-      this.state = {
-        activeItem: -1
-      };
+      const {activeItem} = props;
+
+      this.state = {activeItem};
 
       this._handleChangeActiveItem = this._handleChangeActiveItem.bind(this);
     }

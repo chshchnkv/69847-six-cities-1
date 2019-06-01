@@ -11,7 +11,6 @@ import withTransformProps from "../../hocs/with-transform-props/with-transform-p
 
 
 const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => {
-  console.log(props);
   return Object.assign({}, props, {
     onChangeCity: props.onChangeActiveItem
   });
@@ -22,8 +21,10 @@ class App extends React.Component {
     const {
       offers,
       currentCityId,
+      currentOfferId,
       currentCityOffers,
-      onChangeCity
+      onChangeCity,
+      onSelectOffer
     } = this.props;
 
     /* получаем массив из городов, которые упоминаются в списке оферов */
@@ -62,7 +63,7 @@ class App extends React.Component {
             </section>
           </div>
 
-          <MainPage cityId={currentCityId} offers={currentCityOffers}/>
+          <MainPage cityId={currentCityId} offers={currentCityOffers} onSelectOffer={onSelectOffer} offerId={currentOfferId} />
 
         </main>
       </React.Fragment>
@@ -73,6 +74,7 @@ class App extends React.Component {
 App.propTypes = {
   currentCityId: PropTypes.number.isRequired,
   currentCityOffers: PropTypes.array.isRequired,
+  currentOfferId: PropTypes.number,
   offers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -90,18 +92,23 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
-  onChangeCity: PropTypes.func
+  onChangeCity: PropTypes.func,
+  onSelectOffer: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   currentCityId: state.cityId,
-  currentCityOffers: state.offers.slice(0)
+  currentCityOffers: state.offers.slice(0),
+  currentOfferId: state.offerId,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeCity: (cityId) => {
     dispatch(ActionCreator[Action.CHANGE_CITY](cityId));
     dispatch(ActionCreator[Action.REQUEST_OFFERS](cityId));
+  },
+  onSelectOffer: (offerId) => {
+    dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));
   }
 });
 

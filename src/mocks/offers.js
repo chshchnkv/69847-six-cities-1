@@ -13,7 +13,7 @@ export const offers = [
     type: AccommodationType.APARTMENT,
     rating: 3.2,
     location: {
-      city: 5,
+      city: 1,
       longitude: 52.3909553943508,
       latitude: 4.85309666406198
     },

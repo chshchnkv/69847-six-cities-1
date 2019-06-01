@@ -17,6 +17,8 @@ const MainPage = (props) => {
   const {
     cityId,
     offers,
+    offerId,
+    onSelectOffer
   } = props;
 
   const {title} = getCityInfoById(cityId);
@@ -42,13 +44,11 @@ const MainPage = (props) => {
               <li className="places__option" tabIndex="0">Top rated first</li>
             </ul>
           </form>
-          <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={(id) => {
-            console.log(id);
-          }}/>
+          <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
         </section>
         <div className="cities__right-section">
           <section className="cities__map map">
-            <Map cityId={cityId} pins={offers.map((offer) => offer.location)}/>
+            <Map cityId={cityId} pins={offers.map((offer) => offer.location)} activePin={offers.findIndex((offer) => offer.id === offerId)}/>
           </section>
         </div>
       </div>
@@ -75,6 +75,8 @@ MainPage.propTypes = {
       latitude: PropTypes.number
     })
   })).isRequired,
+  onSelectOffer: PropTypes.func.isRequired,
+  offerId: PropTypes.number
 };
 
 export default MainPage;

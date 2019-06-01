@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import * as leaflet from "leaflet";
-import {getCityInfoById} from "../../utils";
+import {getCityInfoById, getOfferById} from "../../utils";
 
 class Map extends React.PureComponent {
   constructor(props) {
@@ -18,14 +18,14 @@ class Map extends React.PureComponent {
   componentDidMount() {
     const {
       id,
-      cityId
+      activePin = -1,
     } = this.props;
 
     const {
-      zoom,
+      zoom = 12,
       longitude,
       latitude
-    } = getCityInfoById(cityId);
+    } = this._getMapCenter();
 
     this._map = leaflet.map(id, {
       center: [longitude, latitude],
@@ -42,23 +42,29 @@ class Map extends React.PureComponent {
       .addTo(this._map);
 
     this._createPins();
-    this._panZoom();
+
+    if (activePin < 0) {
+      this._panZoom();
+    }
   }
 
   componentDidUpdate() {
-    const {cityId} = this.props;
+    const {activePin} = this.props;
 
     const {
       zoom,
       longitude,
       latitude
-    } = getCityInfoById(cityId);
+    } = this._getMapCenter();
 
     this._map.setView([longitude, latitude], zoom);
 
     this._clearPins();
     this._createPins();
-    this._panZoom();
+
+    if (activePin < 0) {
+      this._panZoom();
+    }
   }
 
   componentWillUnmount() {
@@ -68,6 +74,15 @@ class Map extends React.PureComponent {
   render() {
     const {id} = this.props;
     return <div id={id} style={{display: `flex`, width: 100 + `%`, height: 100 + `%`}}/>;
+  }
+
+  _getMapCenter() {
+    const {
+      cityId,
+      activePin = -1,
+      pins,
+    } = this.props;
+    return activePin >= 0 ? pins[activePin] : getCityInfoById(cityId);
   }
 
   _clearPins() {
@@ -103,7 +118,8 @@ Map.propTypes = {
   pins: PropTypes.arrayOf(PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number,
-  }))
+  })),
+  activePin: PropTypes.number
 };
 
 export default Map;

@@ -3,12 +3,14 @@ import {getOffersByCityId} from "./utils";
 
 const initialState = {
   cityId: offers[0].location.city,
-  offers: getOffersByCityId(offers, offers[0].location.city)
+  offers: getOffersByCityId(offers, offers[0].location.city),
+  offerId: offers[0].id
 };
 
 export const Action = {
   CHANGE_CITY: `change_city`,
-  REQUEST_OFFERS: `request_offers`
+  REQUEST_OFFERS: `request_offers`,
+  CHANGE_OFFER: `change_offer`,
 };
 
 export const ActionCreator = {
@@ -20,7 +22,12 @@ export const ActionCreator = {
   [Action.REQUEST_OFFERS]: (cityId) => ({
     type: Action.REQUEST_OFFERS,
     payload: getOffersByCityId(offers, cityId)
-  })
+  }),
+
+  [Action.CHANGE_OFFER]: (offerId) => ({
+    type: Action.CHANGE_OFFER,
+    payload: offerId
+  }),
 };
 
 export const reducer = (state = initialState, action) => {
@@ -32,6 +39,10 @@ export const reducer = (state = initialState, action) => {
     case Action.REQUEST_OFFERS:
       return Object.assign({}, state, {
         offers: action.payload.slice(0)
+      });
+    case Action.CHANGE_OFFER:
+      return Object.assign({}, state, {
+        offerId: action.payload
       });
   }
   return state;
