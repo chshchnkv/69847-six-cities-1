@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import * as leaflet from "leaflet";
+import {getCityInfoById} from "../../utils";
 
 class Map extends React.PureComponent {
   constructor(props) {
@@ -17,14 +18,14 @@ class Map extends React.PureComponent {
   componentDidMount() {
     const {
       id,
-      city
+      cityId
     } = this.props;
 
     const {
       zoom,
       longitude,
       latitude
-    } = city;
+    } = getCityInfoById(cityId);
 
     this._map = leaflet.map(id, {
       center: [longitude, latitude],
@@ -45,13 +46,13 @@ class Map extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    const {city} = this.props;
+    const {cityId} = this.props;
 
     const {
       zoom,
       longitude,
       latitude
-    } = city;
+    } = getCityInfoById(cityId);
 
     this._map.setView([longitude, latitude], zoom);
 
@@ -98,12 +99,7 @@ Map.defaultProps = {
 
 Map.propTypes = {
   id: PropTypes.string,
-  city: PropTypes.shape({
-    title: PropTypes.string,
-    longitude: PropTypes.number,
-    latitude: PropTypes.number,
-    zoom: PropTypes.number,
-  }).isRequired,
+  cityId: PropTypes.number.isRequired,
   pins: PropTypes.arrayOf(PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number,

@@ -1,9 +1,9 @@
 import {offers} from "./mocks/offers";
-import {getOffersByCity} from "./utils";
+import {getOffersByCityId} from "./utils";
 
 const initialState = {
-  city: offers[0].location.city,
-  offers: getOffersByCity(offers, offers[0].location.city)
+  cityId: offers[0].location.city,
+  offers: getOffersByCityId(offers, offers[0].location.city)
 };
 
 export const Action = {
@@ -12,14 +12,14 @@ export const Action = {
 };
 
 export const ActionCreator = {
-  [Action.CHANGE_CITY]: (city) => ({
+  [Action.CHANGE_CITY]: (cityId) => ({
     type: Action.CHANGE_CITY,
-    payload: city
+    payload: cityId
   }),
 
-  [Action.REQUEST_OFFERS]: (city) => ({
+  [Action.REQUEST_OFFERS]: (cityId) => ({
     type: Action.REQUEST_OFFERS,
-    payload: getOffersByCity(offers, city)
+    payload: getOffersByCityId(offers, cityId)
   })
 };
 
@@ -27,7 +27,7 @@ export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case Action.CHANGE_CITY:
       return Object.assign({}, state, {
-        city: action.payload
+        cityId: action.payload
       });
     case Action.REQUEST_OFFERS:
       return Object.assign({}, state, {

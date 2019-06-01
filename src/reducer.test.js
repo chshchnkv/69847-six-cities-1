@@ -16,7 +16,7 @@ const initialState = {
       type: AccommodationType.APARTMENT,
       rating: 3.2,
       location: {
-        city: `Amsterdam`,
+        cityId: `Amsterdam`,
         longitude: 52.3909553943508,
         latitude: 4.85309666406198
       },
@@ -32,7 +32,7 @@ const initialState = {
       type: AccommodationType.HOUSE,
       rating: 2.8,
       location: {
-        city: `Amsterdam`,
+        cityId: `Amsterdam`,
         longitude: 52.369553943508,
         latitude: 4.85309666406198
       },
@@ -48,7 +48,7 @@ const initialState = {
       type: AccommodationType.HOTEL,
       rating: 4.2,
       location: {
-        city: `Amsterdam`,
+        cityId: `Amsterdam`,
         longitude: 52.3909553943508,
         latitude: 4.929309666406198
       },
@@ -63,7 +63,7 @@ const initialState = {
       type: AccommodationType.APARTMENT,
       rating: 5,
       location: {
-        city: `Amsterdam`,
+        cityId: `Amsterdam`,
         longitude: 52.3809553943508,
         latitude: 4.939309666406198
       },
@@ -79,7 +79,7 @@ const initialState = {
       type: AccommodationType.HOTEL,
       rating: 1,
       location: {
-        city: `Amsterdam`,
+        cityId: `Amsterdam`,
         longitude: 52.3809553943508,
         latitude: 4.929309666406198
       },
@@ -107,7 +107,7 @@ const actionRequestOffers = {
       type: AccommodationType.HOSTEL,
       rating: 4.3,
       location: {
-        city: `Paris`,
+        cityId: `Paris`,
         longitude: 48.8839479,
         latitude: 2.3421239
       },
@@ -123,7 +123,7 @@ const actionRequestOffers = {
       type: AccommodationType.HOTEL,
       rating: 3.1,
       location: {
-        city: `Paris`,
+        cityId: `Paris`,
         longitude: 48.884579,
         latitude: 2.349087
       },
@@ -139,7 +139,7 @@ const actionRequestOffers = {
       type: AccommodationType.HOTEL,
       rating: 3.3,
       location: {
-        city: `Paris`,
+        cityId: `Paris`,
         longitude: 48.882872,
         latitude: 2.342178
       },
@@ -155,7 +155,7 @@ const actionRequestOffers = {
       type: AccommodationType.HOTEL,
       rating: 4.5,
       location: {
-        city: `Paris`,
+        cityId: `Paris`,
         longitude: 48.886555,
         latitude: 2.335414
       },

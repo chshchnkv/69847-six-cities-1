@@ -3,15 +3,11 @@ import PropTypes from "prop-types";
 import City from "../city/city";
 
 
-class CityList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+class CityList extends React.PureComponent {
   render() {
     const {
       cities,
-      activeCity,
+      activeItem,
       onChangeCity,
     } = this.props;
 
@@ -19,7 +15,7 @@ class CityList extends React.Component {
       <ul className="locations__list tabs__list">
         {cities.map((city, i) => (
           <li className="locations__item" key={`city-${i}`}>
-            <City title={city.title} isActive={activeCity === city.title} onActivateCity={onChangeCity} longitude={city.longitude} latitude={city.latitude}/>
+            <City id={city.id} title={city.title} isActive={activeItem === city.id} onActivateCity={onChangeCity} longitude={city.longitude} latitude={city.latitude}/>
           </li>
         ))}
       </ul>
@@ -29,11 +25,12 @@ class CityList extends React.Component {
 
 CityList.propTypes = {
   cities: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
     title: PropTypes.string,
     longitude: PropTypes.number,
     latitude: PropTypes.number
   })).isRequired,
-  activeCity: PropTypes.string.isRequired,
+  activeItem: PropTypes.number.isRequired,
   onChangeCity: PropTypes.func.isRequired
 };
 

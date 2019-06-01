@@ -2,14 +2,14 @@ import React from "react";
 import renderer from "react-test-renderer";
 import {App} from "./app";
 import {offers} from "../../mocks/offers";
-import {getOffersByCity} from "../../utils";
+import {getOffersByCityId} from "../../utils";
 
-const mockCity = `Amsterdam`;
+const mockCity = 1;
 
 it(`App renders correctly`, () => {
   const onChangeCity = jest.fn();
   const tree = renderer
-    .create(<App offers={offers} currentCity={mockCity} currentCityOffers={getOffersByCity(offers, mockCity)} onChangeCity={onChangeCity}/>)
+    .create(<App offers={offers} currentCityId={mockCity} currentCityOffers={getOffersByCityId(offers, mockCity)} onChangeCity={onChangeCity}/>)
     .toJSON();
   expect(tree).toMatchSnapshot();
 });
