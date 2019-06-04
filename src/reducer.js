@@ -30,6 +30,16 @@ export const ActionCreator = {
   }),
 };
 
+const Operation = {
+  loadOffers: () => (dispatch, _getState, api) => {
+    return api.get(`/hotels`)
+      .then((response) => {
+        const offers = response.data;
+        dispatch(ActionCreator[Action.REQUEST_OFFERS]())
+      })
+  }
+};
+
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case Action.CHANGE_CITY:
@@ -38,7 +48,7 @@ export const reducer = (state = initialState, action) => {
       });
     case Action.REQUEST_OFFERS:
       return Object.assign({}, state, {
-        offers: action.payload.slice(0)
+        offers: action.payload
       });
     case Action.CHANGE_OFFER:
       return Object.assign({}, state, {
