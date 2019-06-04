@@ -18,18 +18,13 @@ class PlaceCard extends React.PureComponent {
 
     const {
       id = 0,
-      isPremium = false,
+      is_premium: isPremium = false,
       title = ``,
-      src = ``,
+      preview_image: src = ``,
       rating = 0,
       price,
       type = ``,
     } = place;
-
-    const {
-      value,
-      period = PeriodType.NIGHT
-    } = price;
 
     return (
       <article className="cities__place-card place-card">
@@ -45,8 +40,8 @@ class PlaceCard extends React.PureComponent {
         <div className="place-card__info">
           <div className="place-card__price-wrapper">
             <div className="place-card__price">
-              <b className="place-card__price-value">&euro;{value}</b>
-              <span className="place-card__price-text">&#47;&nbsp;{period}</span>
+              <b className="place-card__price-value">&euro;{price}</b>
+              <span className="place-card__price-text">&#47;&nbsp;{PeriodType.NIGHT}</span>
             </div>
             <button className="place-card__bookmark-button button" type="button">
               <svg className="place-card__bookmark-icon" width="18" height="19">

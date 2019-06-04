@@ -15,20 +15,21 @@ const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props
 
 const MainPage = (props) => {
   const {
+    cities,
     cityId,
     offers,
     offerId,
     onSelectOffer
   } = props;
 
-  const {title} = getCityInfoById(cityId);
+  const {name = ``} = getCityInfoById(cities, cityId);
 
   return (
     <div className="cities__places-wrapper">
       <div className="cities__places-container container">
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
-          <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {title}</b>
+          <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
           <form className="places__sorting" action="#" method="get">
             <span className="places__sorting-caption">Sort by</span>
             <span className="places__sorting-type" tabIndex="0">
@@ -75,6 +76,15 @@ MainPage.propTypes = {
       latitude: PropTypes.number
     })
   })).isRequired,
+  cities: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    location: PropTypes.shape({
+      longitude: PropTypes.number.isRequired,
+      latitude: PropTypes.number.isRequired,
+      zoom: PropTypes.number.isRequired,
+    })
+  })),
   onSelectOffer: PropTypes.func.isRequired,
   offerId: PropTypes.number
 };

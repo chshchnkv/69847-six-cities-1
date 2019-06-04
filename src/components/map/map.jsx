@@ -27,24 +27,26 @@ class Map extends React.PureComponent {
       latitude
     } = this._getMapCenter();
 
-    this._map = leaflet.map(id, {
-      center: [longitude, latitude],
-      zoom,
-      zoomControl: false,
-      marker: true
-    });
+    if (longitude && latitude) {
+      this._map = leaflet.map(id, {
+        center: [longitude, latitude],
+        zoom,
+        zoomControl: false,
+        marker: true
+      });
 
-    this._map.setView([longitude, latitude], zoom);
-    leaflet
-      .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
-        attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
-      })
-      .addTo(this._map);
+      this._map.setView([longitude, latitude], zoom);
+      leaflet
+        .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
+          attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
+        })
+        .addTo(this._map);
 
-    this._createPins();
+      this._createPins();
 
-    if (activePin < 0) {
-      this._panZoom();
+      if (activePin < 0) {
+        this._panZoom();
+      }
     }
   }
 
