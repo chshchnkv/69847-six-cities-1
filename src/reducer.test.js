@@ -1,5 +1,5 @@
-import {AccommodationType, PeriodType} from "./data";
-import {reducer} from "./reducer";
+import {AccommodationType} from "./data";
+import {Action, reducer} from "./reducer";
 
 const initialState = {
   cityId: 1,
@@ -9,10 +9,7 @@ const initialState = {
       title: `Beautiful & luxurious apartment at great location`,
       src: `img/apartment-01.jpg`,
       isPremium: false,
-      price: {
-        value: 120,
-        period: PeriodType.NIGHT
-      },
+      price: 120,
       type: AccommodationType.APARTMENT,
       rating: 3.2,
       location: {
@@ -25,10 +22,7 @@ const initialState = {
       title: `Wood and stone place`,
       src: `img/apartment-02.jpg`,
       isPremium: false,
-      price: {
-        value: 60,
-        period: PeriodType.NIGHT
-      },
+      price: 60,
       type: AccommodationType.HOUSE,
       rating: 2.8,
       location: {
@@ -41,10 +35,7 @@ const initialState = {
       title: `Canal View Prinsengracht`,
       src: `img/apartment-03.jpg`,
       isPremium: false,
-      price: {
-        value: 30,
-        period: PeriodType.NIGHT
-      },
+      price: 30,
       type: AccommodationType.HOTEL,
       rating: 4.2,
       location: {
@@ -57,9 +48,7 @@ const initialState = {
       title: `Nice, cozy, warm big bed apartment`,
       src: `img/apartment-01.jpg`,
       isPremium: true,
-      price: {
-        value: 300
-      },
+      price: 300,
       type: AccommodationType.APARTMENT,
       rating: 5,
       location: {
@@ -72,10 +61,7 @@ const initialState = {
       title: `ibis Styles`,
       src: `img/studio-01.jpg`,
       isPremium: false,
-      price: {
-        value: 110,
-        period: PeriodType.NIGHT
-      },
+      price: 110,
       type: AccommodationType.HOTEL,
       rating: 1,
       location: {
@@ -88,22 +74,19 @@ const initialState = {
 };
 
 const actionChangeCity = {
-  type: `change_city`,
+  type: Action.CHANGE_CITY,
   payload: 2
 };
 
 const actionRequestOffers = {
-  type: `request_offers`,
+  type: Action.LOAD_OFFERS,
   payload: [
     {
       id: 6,
       title: `Le Village Montmartre`,
       src: `img/studio-01.jpg`,
       isPremium: false,
-      price: {
-        value: 110,
-        period: PeriodType.NIGHT
-      },
+      price: 110,
       type: AccommodationType.HOSTEL,
       rating: 4.3,
       location: {
@@ -116,10 +99,7 @@ const actionRequestOffers = {
       title: `Hotel Nation Montmartre Paris`,
       src: `img/studio-01.jpg`,
       isPremium: false,
-      price: {
-        value: 68.5,
-        period: PeriodType.NIGHT
-      },
+      price: 68.5,
       type: AccommodationType.HOTEL,
       rating: 3.1,
       location: {
@@ -132,10 +112,7 @@ const actionRequestOffers = {
       title: `Hôtel Regina`,
       src: `img/studio-01.jpg`,
       isPremium: false,
-      price: {
-        value: 152,
-        period: PeriodType.NIGHT
-      },
+      price: 152,
       type: AccommodationType.HOTEL,
       rating: 3.3,
       location: {
@@ -148,10 +125,7 @@ const actionRequestOffers = {
       title: `Hotel Des Arts`,
       src: `img/studio-01.jpg`,
       isPremium: false,
-      price: {
-        value: 110,
-        period: PeriodType.NIGHT
-      },
+      price: 110,
       type: AccommodationType.HOTEL,
       rating: 4.5,
       location: {

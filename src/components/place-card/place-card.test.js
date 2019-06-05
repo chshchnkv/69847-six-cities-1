@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import {AccommodationType, PeriodType} from "../../data";
+import {AccommodationType} from "../../data";
 import PlaceCard from "./place-card";
 
 const mock = {
@@ -8,10 +8,7 @@ const mock = {
   title: `Beautiful & luxurious apartment at great location`,
   src: `img/apartment-01.jpg`,
   isPremium: false,
-  price: {
-    value: 120,
-    period: PeriodType.NIGHT
-  },
+  price: 120,
   type: AccommodationType.APARTMENT,
   rating: 3.2,
 };

@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {AccommodationType, PeriodType} from "../../data";
+import {AccommodationType} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator} from "../../reducer";
 import {connect} from "react-redux";
 import CityList from "../city-list/city-list";
-import {getCitiesFromOffers} from "../../utils";
+import {getOffersByCityId} from "../../utils";
 import withActiveItem from "../../hocs/with-active-item/with-active-item";
 import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 
@@ -19,6 +19,7 @@ const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) 
 class App extends React.Component {
   render() {
     const {
+      cities,
       offers,
       currentCityId,
       currentOfferId,
@@ -27,8 +28,9 @@ class App extends React.Component {
       onSelectOffer
     } = this.props;
 
-    /* получаем массив из городов, которые упоминаются в списке оферов */
-    this._citiesList = getCitiesFromOffers(offers);
+    if (cities.length === 0 || offers.length === 0) {
+      return null;
+    }
 
     return (
       <React.Fragment>
@@ -59,11 +61,11 @@ class App extends React.Component {
           <h1 className="visually-hidden">Cities</h1>
           <div className="cities tabs">
             <section className="locations container">
-              <CityListWithActiveItemWrapped cities={this._citiesList} activeItem={currentCityId} onChangeActiveItem={onChangeCity}/>
+              <CityListWithActiveItemWrapped cities={cities} activeItem={currentCityId} onChangeActiveItem={onChangeCity}/>
             </section>
           </div>
 
-          <MainPage cityId={currentCityId} offers={currentCityOffers} onSelectOffer={onSelectOffer} offerId={currentOfferId} />
+          <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} />
 
         </main>
       </React.Fragment>
@@ -75,19 +77,25 @@ App.propTypes = {
   currentCityId: PropTypes.number.isRequired,
   currentCityOffers: PropTypes.array.isRequired,
   currentOfferId: PropTypes.number,
+  cities: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    location: PropTypes.shape({
+      longitude: PropTypes.number,
+      latitude: PropTypes.number,
+      zoom: PropTypes.number
+    })
+  })),
   offers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     src: PropTypes.string,
     rating: PropTypes.number,
-    price: PropTypes.shape({
-      value: PropTypes.number,
-      period: PropTypes.oneOf([...Object.values(PeriodType)])
-    }),
+    price: PropTypes.number,
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
     location: PropTypes.shape({
-      city: PropTypes.number.isRequired,
+      city: PropTypes.number,
       longitude: PropTypes.number.isRequired,
       latitude: PropTypes.number.isRequired
     })
@@ -97,15 +105,17 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  offers: state.offers,
+  cities: state.cities,
   currentCityId: state.cityId,
-  currentCityOffers: state.offers.slice(0),
   currentOfferId: state.offerId,
+  currentCityOffers: getOffersByCityId(state.offers, state.cityId),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeCity: (cityId) => {
     dispatch(ActionCreator[Action.CHANGE_CITY](cityId));
-    dispatch(ActionCreator[Action.REQUEST_OFFERS](cityId));
+    dispatch(ActionCreator[Action.CHANGE_OFFER](-1));
   },
   onSelectOffer: (offerId) => {
     dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));

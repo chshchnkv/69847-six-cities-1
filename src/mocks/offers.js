@@ -1,4 +1,4 @@
-import {AccommodationType, PeriodType} from "../data";
+import {AccommodationType} from "../data";
 
 export const offers = [
   {
@@ -6,10 +6,7 @@ export const offers = [
     title: `Beautiful & luxurious apartment at great location`,
     src: `img/apartment-01.jpg`,
     isPremium: false,
-    price: {
-      value: 120,
-      period: PeriodType.NIGHT
-    },
+    price: 120,
     type: AccommodationType.APARTMENT,
     rating: 3.2,
     location: {
@@ -22,10 +19,7 @@ export const offers = [
     title: `Wood and stone place`,
     src: `img/apartment-02.jpg`,
     isPremium: false,
-    price: {
-      value: 60,
-      period: PeriodType.NIGHT
-    },
+    price: 60,
     type: AccommodationType.HOUSE,
     rating: 2.8,
     location: {
@@ -38,10 +32,7 @@ export const offers = [
     title: `Canal View Prinsengracht`,
     src: `img/apartment-03.jpg`,
     isPremium: false,
-    price: {
-      value: 30,
-      period: PeriodType.NIGHT
-    },
+    price: 30,
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
@@ -54,9 +45,7 @@ export const offers = [
     title: `Nice, cozy, warm big bed apartment`,
     src: `img/apartment-01.jpg`,
     isPremium: true,
-    price: {
-      value: 300
-    },
+    price: 300,
     type: AccommodationType.APARTMENT,
     rating: 5,
     location: {
@@ -69,10 +58,7 @@ export const offers = [
     title: `ibis Styles`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 110,
-      period: PeriodType.NIGHT
-    },
+    price: 110,
     type: AccommodationType.HOTEL,
     rating: 1,
     location: {
@@ -85,10 +71,7 @@ export const offers = [
     title: `Le Village Montmartre`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 110,
-      period: PeriodType.NIGHT
-    },
+    price: 110,
     type: AccommodationType.HOSTEL,
     rating: 4.3,
     location: {
@@ -101,10 +84,7 @@ export const offers = [
     title: `Hotel Nation Montmartre Paris`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 68.5,
-      period: PeriodType.NIGHT
-    },
+    price: 68,
     type: AccommodationType.HOTEL,
     rating: 3.1,
     location: {
@@ -117,10 +97,7 @@ export const offers = [
     title: `Hôtel Regina`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 152,
-      period: PeriodType.NIGHT
-    },
+    price: 152,
     type: AccommodationType.HOTEL,
     rating: 3.3,
     location: {
@@ -133,10 +110,7 @@ export const offers = [
     title: `Hotel Des Arts`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 110,
-      period: PeriodType.NIGHT
-    },
+    price: 110,
     type: AccommodationType.HOTEL,
     rating: 4.5,
     location: {
@@ -149,10 +123,7 @@ export const offers = [
     title: `Senator`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 67.64,
-      period: PeriodType.NIGHT
-    },
+    price: 67.64,
     type: AccommodationType.HOTEL,
     rating: 3.2,
     location: {
@@ -165,10 +136,7 @@ export const offers = [
     title: `Hotel Freiheit GmbH Köln`,
     src: `img/studio-01.jpg`,
     isPremium: true,
-    price: {
-      value: 140.46,
-      period: PeriodType.NIGHT
-    },
+    price: 140.46,
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
@@ -181,10 +149,7 @@ export const offers = [
     title: `Humboldt 1 Palais-Hotel`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 145.17,
-      period: PeriodType.NIGHT
-    },
+    price: 145.17,
     type: AccommodationType.HOTEL,
     rating: 4.4,
     location: {
@@ -197,10 +162,7 @@ export const offers = [
     title: `Bürgerhof Hotel`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 57.69,
-      period: PeriodType.NIGHT
-    },
+    price: 57.69,
     type: AccommodationType.HOTEL,
     rating: 3.5,
     location: {
@@ -213,10 +175,7 @@ export const offers = [
     title: `Hotel Alma Grand Place`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 126.8,
-      period: PeriodType.NIGHT
-    },
+    price: 126.8,
     type: AccommodationType.HOTEL,
     rating: 3.7,
     location: {
@@ -229,10 +188,7 @@ export const offers = [
     title: `Pillows Grand Hotel Place Rouppe`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 156.5,
-      period: PeriodType.NIGHT
-    },
+    price: 156.5,
     type: AccommodationType.HOTEL,
     rating: 4.5,
     location: {
@@ -245,10 +201,7 @@ export const offers = [
     title: `Smartflats Design - L42`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 166.3,
-      period: PeriodType.NIGHT
-    },
+    price: 166.3,
     type: AccommodationType.HOTEL,
     rating: 4.3,
     location: {
@@ -261,10 +214,7 @@ export const offers = [
     title: `Steigenberger Hotel Hamburg`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 173,
-      period: PeriodType.NIGHT
-    },
+    price: 173,
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
@@ -277,10 +227,7 @@ export const offers = [
     title: `ARCOTEL Rubin Hamburg`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 92.3,
-      period: PeriodType.NIGHT
-    },
+    price: 92.3,
     type: AccommodationType.HOTEL,
     rating: 4.2,
     location: {
@@ -293,10 +240,7 @@ export const offers = [
     title: `prizeotel Hamburg-City`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 98,
-      period: PeriodType.NIGHT
-    },
+    price: 98,
     type: AccommodationType.HOTEL,
     rating: 4.4,
     location: {
@@ -309,10 +253,7 @@ export const offers = [
     title: `Hyatt House Dusseldorf`,
     src: `img/studio-01.jpg`,
     isPremium: true,
-    price: {
-      value: 212,
-      period: PeriodType.NIGHT
-    },
+    price: 212,
     type: AccommodationType.HOTEL,
     rating: 4.5,
     location: {
@@ -325,10 +266,7 @@ export const offers = [
     title: `Hanseat Hotel`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 121,
-      period: PeriodType.NIGHT
-    },
+    price: 121,
     type: AccommodationType.HOTEL,
     rating: 3.9,
     location: {
@@ -341,10 +279,7 @@ export const offers = [
     title: `Hotel Enger Hof`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 75,
-      period: PeriodType.NIGHT
-    },
+    price: 75,
     type: AccommodationType.HOTEL,
     rating: 3.8,
     location: {
@@ -357,10 +292,7 @@ export const offers = [
     title: `Gut Moschenhof`,
     src: `img/studio-01.jpg`,
     isPremium: false,
-    price: {
-      value: 20,
-      period: PeriodType.NIGHT
-    },
+    price: 20,
     type: AccommodationType.HOSTEL,
     rating: 4.1,
     location: {

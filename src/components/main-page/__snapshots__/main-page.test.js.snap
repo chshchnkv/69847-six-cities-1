@@ -95,7 +95,7 @@ exports[`Main page renders correctly 1`] = `
                 alt="Place image"
                 className="place-card__image"
                 height="200"
-                src="img/apartment-01.jpg"
+                src=""
                 width="260"
               />
             </a>
@@ -193,7 +193,7 @@ exports[`Main page renders correctly 1`] = `
                 alt="Place image"
                 className="place-card__image"
                 height="200"
-                src="img/apartment-02.jpg"
+                src=""
                 width="260"
               />
             </a>
@@ -291,7 +291,7 @@ exports[`Main page renders correctly 1`] = `
                 alt="Place image"
                 className="place-card__image"
                 height="200"
-                src="img/apartment-03.jpg"
+                src=""
                 width="260"
               />
             </a>
@@ -379,13 +379,6 @@ exports[`Main page renders correctly 1`] = `
           className="cities__place-card place-card"
         >
           <div
-            className="place-card__mark"
-          >
-            <span>
-              Premium
-            </span>
-          </div>
-          <div
             className="cities__image-wrapper place-card__image-wrapper"
           >
             <a
@@ -396,7 +389,7 @@ exports[`Main page renders correctly 1`] = `
                 alt="Place image"
                 className="place-card__image"
                 height="200"
-                src="img/apartment-01.jpg"
+                src=""
                 width="260"
               />
             </a>
@@ -494,7 +487,7 @@ exports[`Main page renders correctly 1`] = `
                 alt="Place image"
                 className="place-card__image"
                 height="200"
-                src="img/studio-01.jpg"
+                src=""
                 width="260"
               />
             </a>

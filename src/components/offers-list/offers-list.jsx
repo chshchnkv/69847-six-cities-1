@@ -25,10 +25,7 @@ OffersList.propTypes = {
     title: PropTypes.string.isRequired,
     src: PropTypes.string,
     rating: PropTypes.number,
-    price: PropTypes.shape({
-      value: PropTypes.number,
-      period: PropTypes.oneOf([`night`])
-    }),
+    price: PropTypes.number,
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
   })).isRequired,
