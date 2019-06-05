@@ -103,9 +103,11 @@ class Map extends React.PureComponent {
   }
 
   _panZoom() {
-    const latLngs = this._pinLayers.map((pinLayer) => pinLayer.getLatLng());
-    const bounds = leaflet.latLngBounds(latLngs);
-    this._map.fitBounds(bounds);
+    if (this._pinLayers.length > 0) {
+      const latLngs = this._pinLayers.map((pinLayer) => pinLayer.getLatLng());
+      const bounds = leaflet.latLngBounds(latLngs);
+      this._map.fitBounds(bounds);
+    }
   }
 }
 
