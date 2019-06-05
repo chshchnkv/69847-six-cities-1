@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import * as leaflet from "leaflet";
-import {getCityInfoById} from "../../utils";
 
 class Map extends React.PureComponent {
   constructor(props) {
@@ -18,33 +17,35 @@ class Map extends React.PureComponent {
   componentDidMount() {
     const {
       id,
-      activePin = -1,
+      activePin,
     } = this.props;
 
     const {
-      zoom = 12,
+      zoom,
       longitude,
       latitude
     } = this._getMapCenter();
 
-    this._map = leaflet.map(id, {
-      center: [longitude, latitude],
-      zoom,
-      zoomControl: false,
-      marker: true
-    });
+    if (longitude && latitude) {
+      this._map = leaflet.map(id, {
+        center: [longitude, latitude],
+        zoom,
+        zoomControl: false,
+        marker: true
+      });
 
-    this._map.setView([longitude, latitude], zoom);
-    leaflet
-      .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
-        attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
-      })
-      .addTo(this._map);
+      this._map.setView([longitude, latitude], zoom);
+      leaflet
+        .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
+          attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
+        })
+        .addTo(this._map);
 
-    this._createPins();
+      this._createPins();
 
-    if (activePin < 0) {
-      this._panZoom();
+      if (activePin < 0) {
+        this._panZoom();
+      }
     }
   }
 
@@ -78,11 +79,11 @@ class Map extends React.PureComponent {
 
   _getMapCenter() {
     const {
-      cityId,
+      location,
       activePin = -1,
       pins,
     } = this.props;
-    return activePin >= 0 ? pins[activePin] : getCityInfoById(cityId);
+    return activePin >= 0 ? pins[activePin] : location;
   }
 
   _clearPins() {
@@ -114,7 +115,11 @@ Map.defaultProps = {
 
 Map.propTypes = {
   id: PropTypes.string,
-  cityId: PropTypes.number.isRequired,
+  location: PropTypes.shape({
+    longitude: PropTypes.number,
+    latitude: PropTypes.number,
+    zoom: PropTypes.number,
+  }),
   pins: PropTypes.arrayOf(PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number,
