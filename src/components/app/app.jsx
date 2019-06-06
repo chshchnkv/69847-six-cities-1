@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import {AccommodationType} from "../../data";
 import MainPage from "../main-page/main-page";
-import {Action, ActionCreator} from "../../reducer";
+import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
 import {getOffersByCityId} from "../../utils";
+import SignIn from "../sign-in/sign-in";
 
 
 class App extends React.Component {
@@ -16,12 +17,23 @@ class App extends React.Component {
       currentOfferId,
       currentCityOffers,
       onChangeCity,
-      onSelectOffer
+      onSelectOffer,
+      isAuthorizationRequired = false,
+      user = {},
+      onSignInClick,
+      onLogin,
+      onLogout,
     } = this.props;
 
     if (cities.length === 0 || offers.length === 0) {
       return null;
     }
+
+    const {
+      id: userId = -1,
+      name: userName,
+      avatarUrl: userAvatar = ``,
+    } = user;
 
     return (
       <React.Fragment>
@@ -36,11 +48,21 @@ class App extends React.Component {
               <nav className="header__nav">
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
-                      <div className="header__avatar-wrapper user__avatar-wrapper">
-                      </div>
-                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    </a>
+                    {
+                      userId < 0
+                        ? (
+                          <a className="header__nav-link header__nav-link--profile" href="#" onClick={onSignInClick}>
+                            <div className="header__avatar-wrapper user__avatar-wrapper"/>
+                            <span className="header__user-name user__name">Sign in</span>
+                          </a>
+                        )
+                        : (
+                          <a className="header__nav-link header__nav-link--profile" href="#" onClick={onLogout}>
+                            <div className="header__avatar-wrapper user__avatar-wrapper">{userAvatar === `` ? `` : <img src={userAvatar}/>}</div>
+                            <span className="header__user-name user__name">{userName}</span>
+                          </a>
+                        )
+                    }
                   </li>
                 </ul>
               </nav>
@@ -48,7 +70,7 @@ class App extends React.Component {
           </div>
         </header>
 
-        <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />
+        {isAuthorizationRequired ? <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/> : <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}
 
       </React.Fragment>
     );
@@ -82,8 +104,19 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
+  isAuthorizationRequired: PropTypes.bool,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.string,
+    name: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool
+  }),
   onChangeCity: PropTypes.func,
-  onSelectOffer: PropTypes.func
+  onSelectOffer: PropTypes.func,
+  onSignInClick: PropTypes.func,
+  onLogin: PropTypes.func,
+  onLogout: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -92,6 +125,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   currentCityId: state.cityId,
   currentOfferId: state.offerId,
   currentCityOffers: getOffersByCityId(state.offers, state.cityId),
+  isAuthorizationRequired: state.isAuthorizationRequired,
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -101,6 +136,16 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onSelectOffer: (offerId) => {
     dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));
+  },
+  onSignInClick: () => {
+    dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](true));
+  },
+  onLogin: (email, password) => {
+    dispatch(Operation.login(email, password));
+  },
+  onLogout: () => {
+    dispatch(ActionCreator[Action.CHANGE_USER]({}));
+    dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
   }
 });
 

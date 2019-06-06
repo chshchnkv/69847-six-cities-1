@@ -5,6 +5,8 @@ const initialState = {
   offerId: -1,
   cities: [],
   offers: [],
+  isAuthorizationRequired: false,
+  user: {}
 };
 
 export const Action = {
@@ -12,6 +14,8 @@ export const Action = {
   CHANGE_OFFER: `change_offer`,
   LOAD_OFFERS: `load_offers`,
   LOAD_CITIES: `load_cities`,
+  AUTHORIZATION_REQUIRED: `login`,
+  CHANGE_USER: `change_user`,
 };
 
 export const ActionCreator = {
@@ -34,6 +38,22 @@ export const ActionCreator = {
     type: Action.LOAD_CITIES,
     payload: cities
   }),
+
+  [Action.AUTHORIZATION_REQUIRED]: (authorizationRequired) => ({
+    type: Action.AUTHORIZATION_REQUIRED,
+    payload: authorizationRequired
+  }),
+
+  [Action.CHANGE_USER]: (userInfo) => ({
+    type: Action.CHANGE_USER,
+    payload: {
+      id: userInfo.id,
+      email: userInfo.email,
+      name: userInfo.name,
+      avatarUrl: userInfo.avatar_url,
+      isPro: userInfo.is_pro
+    }
+  })
 };
 
 export const Operation = {
@@ -83,6 +103,20 @@ export const Operation = {
         dispatch(ActionCreator[Action.LOAD_CITIES](cities));
         dispatch(ActionCreator[Action.LOAD_OFFERS](offers));
       })
+  },
+
+  login: (email, password) => (dispatch, _getState, api) => {
+    return api.post(`/login`, {
+      email,
+      password
+    })
+      .then((response) => {
+      dispatch(ActionCreator[Action.CHANGE_USER](response.data));
+      dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
+    })
+      .catch(() => {
+        alert(`Something went wrong :(`);
+      });
   }
 };
 
@@ -103,6 +137,14 @@ export const reducer = (state = initialState, action) => {
     case Action.LOAD_OFFERS:
       return Object.assign({}, state, {
         offers: action.payload
+      });
+    case Action.AUTHORIZATION_REQUIRED:
+      return Object.assign({}, state, {
+        isAuthorizationRequired: action.payload
+      });
+    case Action.CHANGE_USER:
+      return Object.assign({}, state, {
+        user: action.payload
       });
   }
   return state;
