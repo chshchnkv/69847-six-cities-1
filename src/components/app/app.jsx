@@ -4,17 +4,8 @@ import {AccommodationType} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator} from "../../reducer";
 import {connect} from "react-redux";
-import CityList from "../city-list/city-list";
 import {getOffersByCityId} from "../../utils";
-import withActiveItem from "../../hocs/with-active-item/with-active-item";
-import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 
-
-const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => {
-  return Object.assign({}, props, {
-    onChangeCity: props.onChangeActiveItem
-  });
-})(CityList));
 
 class App extends React.Component {
   render() {
@@ -57,17 +48,8 @@ class App extends React.Component {
           </div>
         </header>
 
-        <main className="page__main page__main--index">
-          <h1 className="visually-hidden">Cities</h1>
-          <div className="cities tabs">
-            <section className="locations container">
-              <CityListWithActiveItemWrapped cities={cities} activeItem={currentCityId} onChangeActiveItem={onChangeCity}/>
-            </section>
-          </div>
+        <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />
 
-          <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} />
-
-        </main>
       </React.Fragment>
     );
   }
