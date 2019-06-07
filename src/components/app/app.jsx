@@ -19,21 +19,12 @@ class App extends React.Component {
       onChangeCity,
       onSelectOffer,
       isAuthorizationRequired = false,
-      user = {},
-      onSignInClick,
       onLogin,
-      onLogout,
     } = this.props;
 
     if (cities.length === 0 || offers.length === 0) {
       return null;
     }
-
-    const {
-      id: userId = -1,
-      name: userName,
-      avatarUrl: userAvatar = ``,
-    } = user;
 
     return (
       <React.Fragment>
@@ -47,23 +38,7 @@ class App extends React.Component {
               </div>
               <nav className="header__nav">
                 <ul className="header__nav-list">
-                  <li className="header__nav-item user">
-                    {
-                      userId < 0
-                        ? (
-                          <a className="header__nav-link header__nav-link--profile" href="#" onClick={onSignInClick}>
-                            <div className="header__avatar-wrapper user__avatar-wrapper"/>
-                            <span className="header__user-name user__name">Sign in</span>
-                          </a>
-                        )
-                        : (
-                          <a className="header__nav-link header__nav-link--profile" href="#" onClick={onLogout}>
-                            <div className="header__avatar-wrapper user__avatar-wrapper">{userAvatar === `` ? `` : <img src={userAvatar}/>}</div>
-                            <span className="header__user-name user__name">{userName}</span>
-                          </a>
-                        )
-                    }
-                  </li>
+                  <li className="header__nav-item user">{this._getProfile()}</li>
                 </ul>
               </nav>
             </div>
@@ -73,6 +48,27 @@ class App extends React.Component {
         {isAuthorizationRequired ? <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/> : <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}
 
       </React.Fragment>
+    );
+  }
+
+  _getProfile() {
+    const {
+      user = {},
+      onSignInClick,
+      onLogout
+    } = this.props;
+
+    const {
+      id: userId = -1,
+      name: userName,
+      avatarUrl: userAvatar = ``,
+    } = user;
+
+    return (
+      <a className="header__nav-link header__nav-link--profile" href="#" onClick={userId < 0 ? onSignInClick : onLogout}>
+        <div className="header__avatar-wrapper user__avatar-wrapper">{userAvatar === `` ? `` : <img src={userAvatar}/>}</div>
+        <span className="header__user-name user__name">{userId < 0 ? `Sign in` : userName}</span>
+      </a>
     );
   }
 }
