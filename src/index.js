@@ -7,7 +7,8 @@ import {Operation, reducer} from "./reducer";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import {configureAPI} from "api";
-import {BrowserRouter} from "react-router-dom";
+import {Router} from "react-router-dom";
+import history from "./history";
 
 const init = () => {
   const api = configureAPI();
@@ -25,9 +26,9 @@ const init = () => {
 
   ReactDOM.render(
       <Provider store={store}>
-        <BrowserRouter>
+        <Router history={history}>
           <App/>
-        </BrowserRouter>
+        </Router>
       </Provider>, document.getElementById(`root`)
   );
 };
