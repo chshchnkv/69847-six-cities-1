@@ -50,7 +50,7 @@ class App extends React.Component {
         <Switch>
           <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}/>
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
-          <PrivateRoute path="/favorites" user={user} render = {() => <Favorites cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
+          <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
         </Switch>
 
       </React.Fragment>
