@@ -83,6 +83,7 @@ const cityMock = {
 
 it(`Main page renders correctly`, () => {
   const onSelectOffer = jest.fn();
-  const tree = renderer.create(<MainPage cities={Cities} offers={mock} cityId={cityMock.id} onSelectOffer={onSelectOffer}/>);
+  const onChangeCity = jest.fn();
+  const tree = renderer.create(<MainPage cities={Cities} offers={mock} cityId={cityMock.id} onSelectOffer={onSelectOffer} onChangeCity={onChangeCity}/>);
   expect(tree).toMatchSnapshot();
 });
