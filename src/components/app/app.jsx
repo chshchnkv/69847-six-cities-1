@@ -6,7 +6,9 @@ import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
 import {getOffersByCityId} from "../../utils";
 import SignIn from "../sign-in/sign-in";
-
+import {Switch, Route} from "react-router-dom";
+import {PrivateRoute} from "../private-route/private-route";
+import Favorites from "../favorites/favorites";
 
 class App extends React.Component {
   render() {
@@ -18,8 +20,8 @@ class App extends React.Component {
       currentCityOffers,
       onChangeCity,
       onSelectOffer,
-      isAuthorizationRequired = false,
       onLogin,
+      user = {}
     } = this.props;
 
     if (cities.length === 0 || offers.length === 0) {
@@ -45,7 +47,11 @@ class App extends React.Component {
           </div>
         </header>
 
-        {isAuthorizationRequired ? <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/> : <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}
+        <Switch>
+          <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}/>
+          <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
+          <PrivateRoute path="/favorites" user={user} render = {() => <Favorites cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
+        </Switch>
 
       </React.Fragment>
     );
@@ -100,7 +106,6 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
-  isAuthorizationRequired: PropTypes.bool,
   user: PropTypes.shape({
     id: PropTypes.number,
     email: PropTypes.string,
@@ -121,7 +126,6 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   currentCityId: state.cityId,
   currentOfferId: state.offerId,
   currentCityOffers: getOffersByCityId(state.offers, state.cityId),
-  isAuthorizationRequired: state.isAuthorizationRequired,
   user: state.user,
 });
 
@@ -134,7 +138,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));
   },
   onSignInClick: () => {
-    dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](true));
+    history.pushState(null, null, `/login`);
   },
   onLogin: (email, password) => {
     dispatch(Operation.login(email, password));

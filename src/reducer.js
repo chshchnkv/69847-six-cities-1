@@ -112,7 +112,7 @@ export const Operation = {
     })
       .then((response) => {
       dispatch(ActionCreator[Action.CHANGE_USER](response.data));
-      dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
+      history.pushState(null, null, `/`);
     })
       .catch(() => {
         alert(`Something went wrong :(`);
