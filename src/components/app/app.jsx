@@ -6,7 +6,9 @@ import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
 import {getOffersByCityId} from "../../utils";
 import SignIn from "../sign-in/sign-in";
-
+import {Switch, Route, Link} from "react-router-dom";
+import {PrivateRoute} from "../private-route/private-route";
+import Favorites from "../favorites/favorites";
 
 class App extends React.Component {
   render() {
@@ -18,8 +20,8 @@ class App extends React.Component {
       currentCityOffers,
       onChangeCity,
       onSelectOffer,
-      isAuthorizationRequired = false,
       onLogin,
+      user = {}
     } = this.props;
 
     if (cities.length === 0 || offers.length === 0) {
@@ -32,9 +34,9 @@ class App extends React.Component {
           <div className="container">
             <div className="header__wrapper">
               <div className="header__left">
-                <a className="header__logo-link header__logo-link--active">
+                <Link to="/" className="header__logo-link header__logo-link--active">
                   <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-                </a>
+                </Link>
               </div>
               <nav className="header__nav">
                 <ul className="header__nav-list">
@@ -45,7 +47,11 @@ class App extends React.Component {
           </div>
         </header>
 
-        {isAuthorizationRequired ? <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/> : <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}
+        <Switch>
+          <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}/>
+          <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
+          <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
+        </Switch>
 
       </React.Fragment>
     );
@@ -54,8 +60,6 @@ class App extends React.Component {
   _getProfile() {
     const {
       user = {},
-      onSignInClick,
-      onLogout
     } = this.props;
 
     const {
@@ -65,10 +69,10 @@ class App extends React.Component {
     } = user;
 
     return (
-      <a className="header__nav-link header__nav-link--profile" href="#" onClick={userId < 0 ? onSignInClick : onLogout}>
+      <Link className="header__nav-link header__nav-link--profile" href="#" to={userId < 0 ? `/login` : `/`}>
         <div className="header__avatar-wrapper user__avatar-wrapper">{userAvatar === `` ? `` : <img src={userAvatar}/>}</div>
         <span className="header__user-name user__name">{userId < 0 ? `Sign in` : userName}</span>
-      </a>
+      </Link>
     );
   }
 }
@@ -100,7 +104,6 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
-  isAuthorizationRequired: PropTypes.bool,
   user: PropTypes.shape({
     id: PropTypes.number,
     email: PropTypes.string,
@@ -110,7 +113,6 @@ App.propTypes = {
   }),
   onChangeCity: PropTypes.func,
   onSelectOffer: PropTypes.func,
-  onSignInClick: PropTypes.func,
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
 };
@@ -121,7 +123,6 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   currentCityId: state.cityId,
   currentOfferId: state.offerId,
   currentCityOffers: getOffersByCityId(state.offers, state.cityId),
-  isAuthorizationRequired: state.isAuthorizationRequired,
   user: state.user,
 });
 
@@ -132,9 +133,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onSelectOffer: (offerId) => {
     dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));
-  },
-  onSignInClick: () => {
-    dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](true));
   },
   onLogin: (email, password) => {
     dispatch(Operation.login(email, password));

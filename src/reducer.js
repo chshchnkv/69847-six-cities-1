@@ -1,4 +1,5 @@
 import {getNewId} from "./utils";
+import history from "./history";
 
 const initialState = {
   cityId: -1,
@@ -112,12 +113,12 @@ export const Operation = {
     })
       .then((response) => {
       dispatch(ActionCreator[Action.CHANGE_USER](response.data));
-      dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
+      history.push(`/`);
     })
       .catch(() => {
         alert(`Something went wrong :(`);
       });
-  }
+  },
 };
 
 export const reducer = (state = initialState, action) => {
