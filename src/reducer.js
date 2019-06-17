@@ -17,6 +17,7 @@ export const Action = {
   LOAD_CITIES: `load_cities`,
   AUTHORIZATION_REQUIRED: `login`,
   CHANGE_USER: `change_user`,
+  LOAD_REVIEWS: `load_reviews`,
 };
 
 export const ActionCreator = {
@@ -54,6 +55,11 @@ export const ActionCreator = {
       avatarUrl: userInfo.avatar_url,
       isPro: userInfo.is_pro
     }
+  }),
+
+  [Action.LOAD_REVIEWS]: (reviews) => ({
+    type: Action.LOAD_REVIEWS,
+    payload: reviews
   })
 };
 
@@ -91,7 +97,7 @@ export const Operation = {
             ...{location: {
               longitude: location.latitude,
               latitude: location.longitude,
-              }
+            }
             }
           });
         }
@@ -103,7 +109,14 @@ export const Operation = {
         }
         dispatch(ActionCreator[Action.LOAD_CITIES](cities));
         dispatch(ActionCreator[Action.LOAD_OFFERS](offers));
-      })
+      });
+  },
+
+  loadComments: (propertyId) => (dispatch, _getState, api) => {
+    return api.get(`/comments/${propertyId}`)
+      .then((response) => {
+        dispatch(ActionCreator[Action.LOAD_REVIEWS](response.data));
+      });
   },
 
   login: (email, password) => (dispatch, _getState, api) => {
@@ -112,9 +125,9 @@ export const Operation = {
       password
     })
       .then((response) => {
-      dispatch(ActionCreator[Action.CHANGE_USER](response.data));
-      history.push(`/`);
-    })
+        dispatch(ActionCreator[Action.CHANGE_USER](response.data));
+        history.push(`/`);
+      })
       .catch(() => {
         alert(`Something went wrong :(`);
       });
@@ -146,6 +159,10 @@ export const reducer = (state = initialState, action) => {
     case Action.CHANGE_USER:
       return Object.assign({}, state, {
         user: action.payload
+      });
+    case Action.LOAD_REVIEWS:
+      return Object.assign({}, state, {
+        reviews: action.payload
       });
   }
   return state;

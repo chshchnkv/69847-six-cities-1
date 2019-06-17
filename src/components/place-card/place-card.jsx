@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import {AccommodationType, PeriodType} from "../../data";
 import {ratingToPercent} from "../../utils";
+import {Link} from "react-router-dom";
 
 class PlaceCard extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._handleCardTitleClick = this._handleCardTitleClick.bind(this);
     this._handleCardImageClick = this._handleCardImageClick.bind(this);
   }
 
@@ -52,31 +52,17 @@ class PlaceCard extends React.PureComponent {
           </div>
           <div className="place-card__rating rating">
             <div className="place-card__stars rating__stars">
-              <span style={{width: ratingToPercent(rating) + `%`}}/>
+              <span style={{width: `${ratingToPercent(rating)}%`}}/>
               <span className="visually-hidden">Rating</span>
             </div>
           </div>
           <h2 className="place-card__name">
-            <a href={`/offer/${id}`} onClick={this._handleCardTitleClick}>{title}</a>
+            <Link to={`/offer/${id}`}>{title}</Link>
           </h2>
           <p className="place-card__type">{type}</p>
         </div>
       </article>
     );
-  }
-
-  _handleCardTitleClick(event) {
-    const {
-      place,
-      onTitleClick
-    } = this.props;
-
-    const {
-      id
-    } = place;
-
-    event.preventDefault();
-    onTitleClick(id);
   }
 
   _handleCardImageClick(event) {
@@ -104,7 +90,6 @@ PlaceCard.propTypes = {
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
   }).isRequired,
-  onTitleClick: PropTypes.func,
   onImageClick: PropTypes.func,
 };
 

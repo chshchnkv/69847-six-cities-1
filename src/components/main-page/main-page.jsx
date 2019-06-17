@@ -28,7 +28,7 @@ const MainPage = (props) => {
     offers,
     offerId,
     onSelectOffer,
-    onChangeCity
+    onChangeCity,
   } = props;
 
   const {
