@@ -1,4 +1,4 @@
-import {getNewId} from "./utils";
+import {getNewId, sortOffers} from "./utils";
 import history from "./history";
 
 const initialState = {
@@ -18,6 +18,7 @@ export const Action = {
   AUTHORIZATION_REQUIRED: `login`,
   CHANGE_USER: `change_user`,
   LOAD_REVIEWS: `load_reviews`,
+  SORT_OFFERS: `sorf_offers`,
 };
 
 export const ActionCreator = {
@@ -60,6 +61,11 @@ export const ActionCreator = {
   [Action.LOAD_REVIEWS]: (reviews) => ({
     type: Action.LOAD_REVIEWS,
     payload: reviews
+  }),
+
+  [Action.SORT_OFFERS]: (sortOption) => ({
+    type: Action.SORT_OFFERS,
+    payload: sortOption
   })
 };
 
@@ -163,6 +169,10 @@ export const reducer = (state = initialState, action) => {
     case Action.LOAD_REVIEWS:
       return Object.assign({}, state, {
         reviews: action.payload
+      });
+    case Action.SORT_OFFERS:
+      return Object.assign({}, state, {
+        offers: sortOffers(state.offers, action.payload)
       });
   }
   return state;

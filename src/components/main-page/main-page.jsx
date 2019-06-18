@@ -7,6 +7,7 @@ import {getCityInfoById} from "../../utils";
 import withActiveItem from "../../hocs/with-active-item/with-active-item";
 import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 import CityList from "../city-list/city-list";
+import SortOffers from "../sort-offers/sort-offers";
 
 const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
   Object.assign({}, props, {
@@ -29,6 +30,7 @@ const MainPage = (props) => {
     offerId,
     onSelectOffer,
     onChangeCity,
+    onSort
   } = props;
 
   const {
@@ -51,21 +53,7 @@ const MainPage = (props) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex="0">
-              Popular
-                <svg className="places__sorting-arrow" width="7" height="4">
-                  <use xlinkHref="#icon-arrow-select"/>
-                </svg>
-              </span>
-              <ul className="places__options places__options--custom places__options--opened">
-                <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                <li className="places__option" tabIndex="0">Price: low to high</li>
-                <li className="places__option" tabIndex="0">Price: high to low</li>
-                <li className="places__option" tabIndex="0">Top rated first</li>
-              </ul>
-            </form>
+            <SortOffers onSort={onSort}/>
             <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
           </section>
           <div className="cities__right-section">
@@ -106,7 +94,8 @@ MainPage.propTypes = {
   })),
   onSelectOffer: PropTypes.func.isRequired,
   offerId: PropTypes.number,
-  onChangeCity: PropTypes.func.isRequired
+  onChangeCity: PropTypes.func.isRequired,
+  onSort: PropTypes.func
 };
 
 export default MainPage;

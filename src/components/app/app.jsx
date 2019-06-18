@@ -4,7 +4,7 @@ import {AccommodationType} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
-import {getCityInfoById, getNearOffersById, getOfferById, getOffersByCityId} from "../../utils";
+import {getNearOffersById, getOfferById, getOffersByCityId} from "../../utils";
 import SignIn from "../sign-in/sign-in";
 import {Switch, Route, Link} from "react-router-dom";
 import {PrivateRoute} from "../private-route/private-route";
@@ -24,6 +24,7 @@ class App extends React.Component {
       onSelectOffer,
       onLoadOfferReviews,
       onLogin,
+      onSort,
       user = {}
     } = this.props;
 
@@ -51,7 +52,7 @@ class App extends React.Component {
         </header>
 
         <Switch>
-          <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity}/>}/>
+          <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} onSort={onSort}/>}/>
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
           <Route path="/offer/:id" render = {({match}) => {
             const offer = getOfferById(offers, parseInt(match.params.id, 10));
@@ -136,6 +137,7 @@ App.propTypes = {
   onSelectOffer: PropTypes.func,
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
+  onSort: PropTypes.func,
   onLoadOfferReviews: PropTypes.func
 };
 
@@ -166,6 +168,9 @@ const mapDispatchToProps = (dispatch) => ({
   onLogout: () => {
     dispatch(ActionCreator[Action.CHANGE_USER]({}));
     dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
+  },
+  onSort: (sortOption) => {
+    dispatch(ActionCreator[Action.SORT_OFFERS](sortOption));
   }
 });
 
