@@ -1,13 +1,13 @@
 import React from "react";
 import OffersList from "../offers-list/offers-list";
 import PropTypes from "prop-types";
-import {AccommodationType} from "../../data";
+import {AccommodationType, sortOptions} from "../../data";
 import Map from "../map/map";
 import {getCityInfoById} from "../../utils";
 import withActiveItem from "../../hocs/with-active-item/with-active-item";
 import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 import CityList from "../city-list/city-list";
-import SortOffers from "../sort-offers/sort-offers";
+import SortList from "../sort-list/sort-list";
 
 const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
   Object.assign({}, props, {
@@ -21,7 +21,6 @@ const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) 
   });
 })(CityList));
 
-
 const MainPage = (props) => {
   const {
     cities,
@@ -30,14 +29,13 @@ const MainPage = (props) => {
     offerId,
     onSelectOffer,
     onChangeCity,
-    onSort
+    activeSortOptionId
   } = props;
 
   const {
     name,
     location
   } = getCityInfoById(cities, cityId);
-
 
   return (
     <main className="page__main page__main--index">
@@ -53,7 +51,7 @@ const MainPage = (props) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
-            <SortOffers onSort={onSort}/>
+            <SortList sortOptions={sortOptions} activeSortOptionId={activeSortOptionId}/>
             <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
           </section>
           <div className="cities__right-section">
@@ -95,7 +93,7 @@ MainPage.propTypes = {
   onSelectOffer: PropTypes.func.isRequired,
   offerId: PropTypes.number,
   onChangeCity: PropTypes.func.isRequired,
-  onSort: PropTypes.func
+  activeSortOptionId: PropTypes.number,
 };
 
 export default MainPage;

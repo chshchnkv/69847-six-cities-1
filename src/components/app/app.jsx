@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {AccommodationType} from "../../data";
+import {AccommodationType, SortType} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
-import {getNearOffersById, getOfferById, getOffersByCityId} from "../../utils";
+import {getNearOffersById, getOfferById, getOffersByCityId, sortOffers} from "../../utils";
 import SignIn from "../sign-in/sign-in";
 import {Switch, Route, Link} from "react-router-dom";
 import {PrivateRoute} from "../private-route/private-route";
@@ -12,6 +12,14 @@ import Favorites from "../favorites/favorites";
 import Property from "../property/property";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      sortOption: 0
+    };
+  }
+
   render() {
     const {
       cities,
@@ -24,7 +32,7 @@ class App extends React.Component {
       onSelectOffer,
       onLoadOfferReviews,
       onLogin,
-      onSort,
+      onPostReview,
       user = {}
     } = this.props;
 
@@ -52,13 +60,18 @@ class App extends React.Component {
         </header>
 
         <Switch>
-          <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} onSort={onSort}/>}/>
+          <Route path="/" exact render = {({location}) => {
+            const params = new URLSearchParams(location.search);
+            const activeSortOptionId = params.has(`sort`) ? parseInt(params.get(`sort`), 10) : SortType.POPULAR;
+
+            return <MainPage activeSortOptionId={activeSortOptionId} cityId={currentCityId} offers={sortOffers(currentCityOffers, activeSortOptionId)} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity}/>;
+          }}/>
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
           <Route path="/offer/:id" render = {({match}) => {
             const offer = getOfferById(offers, parseInt(match.params.id, 10));
             const {id} = offer;
 
-            return <Property place={offer} nearPlaces={getNearOffersById(offers, id)} reviews={reviews} onRequestComments={onLoadOfferReviews} user={user} cities={cities}/>;
+            return <Property place={offer} nearPlaces={getNearOffersById(offers, id)} reviews={reviews} onRequestComments={onLoadOfferReviews} user={user} cities={cities} onPostComment={onPostReview} />;
           }}/>
           <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
         </Switch>
@@ -137,8 +150,8 @@ App.propTypes = {
   onSelectOffer: PropTypes.func,
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
-  onSort: PropTypes.func,
-  onLoadOfferReviews: PropTypes.func
+  onLoadOfferReviews: PropTypes.func,
+  onPostReview: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -162,6 +175,9 @@ const mapDispatchToProps = (dispatch) => ({
   onLoadOfferReviews: (offerId) => {
     dispatch(Operation.loadComments(offerId));
   },
+  onPostReview: (propertyId, rating, comment) => {
+    dispatch(Operation.postComment(propertyId, rating, comment));
+  },
   onLogin: (email, password) => {
     dispatch(Operation.login(email, password));
   },
@@ -169,9 +185,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator[Action.CHANGE_USER]({}));
     dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
   },
-  onSort: (sortOption) => {
-    dispatch(ActionCreator[Action.SORT_OFFERS](sortOption));
-  }
 });
 
 export {App};
