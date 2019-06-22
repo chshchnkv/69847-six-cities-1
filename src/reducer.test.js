@@ -79,7 +79,7 @@ const actionChangeCity = {
 };
 
 const actionRequestOffers = {
-  type: Action.LOAD_OFFERS,
+  type: Action.SET_OFFERS,
   payload: [
     {
       id: 6,

@@ -9,6 +9,7 @@ import thunk from "redux-thunk";
 import {configureAPI} from "api";
 import {Router} from "react-router-dom";
 import history from "./history";
+import {getSortOptionsFromUrl} from "./utils";
 
 const init = () => {
   const api = configureAPI();
@@ -22,7 +23,10 @@ const init = () => {
   );
   /* eslint-enable */
 
-  store.dispatch(Operation.loadOffers());
+  store.dispatch(Operation.loadOffers())
+    .then(() => {
+      store.dispatch(Operation.sortOffers(getSortOptionsFromUrl(window.location)));
+    });
 
   ReactDOM.render(
       <Provider store={store}>

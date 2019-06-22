@@ -10,29 +10,48 @@ export const PeriodType = {
   NIGHT: `night`
 };
 
-export const SortType = {
-  POPULAR: 0,
-  PRICE_LOW_TO_HIGH: 1,
-  PRICE_HIGH_TO_LOW: 2,
-  TOP_RATED: 3
+export const urlSortField = `sortby`;
+export const urlSortOrder = `order`;
+
+export const SortField = {
+  ID: `id`,
+  PRICE: `price`,
+  RANK: `rank`
+};
+
+export const SortOrder = {
+  ASC: `asc`,
+  DESC: `desc`
 };
 
 export const sortOptions = [
   {
-    id: SortType.POPULAR,
-    title: `Popular`
+    title: `Popular`,
+    sort: {
+      field: SortField.ID,
+      order: SortOrder.ASC
+    }
   },
   {
-    id: SortType.PRICE_LOW_TO_HIGH,
-    title: `Price: low to high`
+    title: `Price: low to high`,
+    sort: {
+      field: SortField.PRICE,
+      order: SortOrder.ASC
+    }
   },
   {
-    id: SortType.PRICE_HIGH_TO_LOW,
-    title: `Price: high to low`
+    title: `Price: high to low`,
+    sort: {
+      field: SortField.PRICE,
+      order: SortOrder.DESC
+    }
   },
   {
-    id: SortType.TOP_RATED,
-    title: `Top rated first`
+    title: `Top rated first`,
+    sort: {
+      field: SortField.RANK,
+      order: SortOrder.DESC
+    }
   }
 ];
 

@@ -1,4 +1,4 @@
-import {getNewId} from "./utils";
+import {getNewId, sortOffers} from "./utils";
 import history from "./history";
 
 const initialState = {
@@ -13,11 +13,12 @@ const initialState = {
 export const Action = {
   CHANGE_CITY: `change_city`,
   CHANGE_OFFER: `change_offer`,
-  LOAD_OFFERS: `load_offers`,
+  SET_OFFERS: `set_offers`,
   LOAD_CITIES: `load_cities`,
   AUTHORIZATION_REQUIRED: `login`,
   CHANGE_USER: `change_user`,
   LOAD_REVIEWS: `load_reviews`,
+  SORT_OPTIONS: `sort`,
 };
 
 export const ActionCreator = {
@@ -31,8 +32,8 @@ export const ActionCreator = {
     payload: offerId
   }),
 
-  [Action.LOAD_OFFERS]: (offers) => ({
-    type: Action.LOAD_OFFERS,
+  [Action.SET_OFFERS]: (offers) => ({
+    type: Action.SET_OFFERS,
     payload: offers
   }),
 
@@ -60,6 +61,11 @@ export const ActionCreator = {
   [Action.LOAD_REVIEWS]: (reviews) => ({
     type: Action.LOAD_REVIEWS,
     payload: reviews
+  }),
+
+  [Action.SORT_OPTIONS]: (sortOptions) => ({
+    type: Action.SORT_OPTIONS,
+    payload: sortOptions
   }),
 };
 
@@ -108,7 +114,7 @@ export const Operation = {
           dispatch(ActionCreator[Action.CHANGE_CITY](cities[0].id));
         }
         dispatch(ActionCreator[Action.LOAD_CITIES](cities));
-        dispatch(ActionCreator[Action.LOAD_OFFERS](offers));
+        dispatch(ActionCreator[Action.SET_OFFERS](offers));
       });
   },
 
@@ -138,6 +144,12 @@ export const Operation = {
     }).then((response) => {
       dispatch(ActionCreator[Action.LOAD_REVIEWS](response.data));
     }).catch(() => alert(`Something went wrong :(`));
+  },
+
+  sortOffers: (sortOptions) => (dispatch, _getState, api) => {
+    const {offers} = _getState();
+    dispatch(ActionCreator[Action.SORT_OPTIONS](sortOptions));
+    dispatch(ActionCreator[Action.SET_OFFERS](sortOffers(offers, sortOptions)));
   }
 };
 
@@ -155,7 +167,7 @@ export const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         cities: action.payload
       });
-    case Action.LOAD_OFFERS:
+    case Action.SET_OFFERS:
       return Object.assign({}, state, {
         offers: action.payload
       });
@@ -170,6 +182,10 @@ export const reducer = (state = initialState, action) => {
     case Action.LOAD_REVIEWS:
       return Object.assign({}, state, {
         reviews: action.payload
+      });
+    case Action.SORT_OPTIONS:
+      return Object.assign({}, state, {
+        sort: action.payload
       });
   }
   return state;

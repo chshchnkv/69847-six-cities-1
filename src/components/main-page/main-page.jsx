@@ -29,7 +29,8 @@ const MainPage = (props) => {
     offerId,
     onSelectOffer,
     onChangeCity,
-    activeSortOptionId
+    sort,
+    onSort
   } = props;
 
   const {
@@ -51,7 +52,7 @@ const MainPage = (props) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
-            <SortList sortOptions={sortOptions} activeSortOptionId={activeSortOptionId}/>
+            <SortList sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
             <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
           </section>
           <div className="cities__right-section">
@@ -91,9 +92,13 @@ MainPage.propTypes = {
     })
   })),
   onSelectOffer: PropTypes.func.isRequired,
+  onSort: PropTypes.func,
   offerId: PropTypes.number,
   onChangeCity: PropTypes.func.isRequired,
-  activeSortOptionId: PropTypes.number,
+  sort: PropTypes.shape({
+    field: PropTypes.string,
+    order: PropTypes.string
+  }),
 };
 
 export default MainPage;

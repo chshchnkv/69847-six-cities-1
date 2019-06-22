@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {AccommodationType, SortType} from "../../data";
+import {AccommodationType} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
-import {getNearOffersById, getOfferById, getOffersByCityId, sortOffers} from "../../utils";
+import {getNearOffersById, getOfferById, getOffersByCityId, setSortOptionsToUrl} from "../../utils";
 import SignIn from "../sign-in/sign-in";
 import {Switch, Route, Link} from "react-router-dom";
 import {PrivateRoute} from "../private-route/private-route";
 import Favorites from "../favorites/favorites";
 import Property from "../property/property";
+import history from "../../history";
 
 class App extends React.Component {
   constructor(props) {
@@ -33,6 +34,8 @@ class App extends React.Component {
       onLoadOfferReviews,
       onLogin,
       onPostReview,
+      sort,
+      onSort,
       user = {}
     } = this.props;
 
@@ -60,18 +63,31 @@ class App extends React.Component {
         </header>
 
         <Switch>
-          <Route path="/" exact render = {({location}) => {
-            const params = new URLSearchParams(location.search);
-            const activeSortOptionId = params.has(`sort`) ? parseInt(params.get(`sort`), 10) : SortType.POPULAR;
-
-            return <MainPage activeSortOptionId={activeSortOptionId} cityId={currentCityId} offers={sortOffers(currentCityOffers, activeSortOptionId)} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity}/>;
+          <Route path="/" exact render = {() => {
+            return <MainPage
+              cityId={currentCityId}
+              offers={currentCityOffers}
+              cities={cities}
+              sort={sort}
+              onSelectOffer={onSelectOffer}
+              offerId={currentOfferId}
+              onChangeCity={onChangeCity}
+              onSort={onSort}/>;
           }}/>
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
           <Route path="/offer/:id" render = {({match}) => {
             const offer = getOfferById(offers, parseInt(match.params.id, 10));
             const {id} = offer;
 
-            return <Property place={offer} nearPlaces={getNearOffersById(offers, id)} reviews={reviews} onRequestComments={onLoadOfferReviews} user={user} cities={cities} onPostComment={onPostReview} />;
+            return <Property
+              place={offer}
+              nearPlaces={getNearOffersById(offers, id)}
+              reviews={reviews}
+              onRequestComments={onLoadOfferReviews}
+              user={user}
+              cities={cities}
+              onPostComment={onPostReview}
+            />;
           }}/>
           <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
         </Switch>
@@ -146,12 +162,17 @@ App.propTypes = {
     avatarUrl: PropTypes.string,
     isPro: PropTypes.bool
   }),
+  sort: PropTypes.shape({
+    field: PropTypes.string,
+    order: PropTypes.string
+  }),
   onChangeCity: PropTypes.func,
   onSelectOffer: PropTypes.func,
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
   onLoadOfferReviews: PropTypes.func,
   onPostReview: PropTypes.func,
+  onSort: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -161,7 +182,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   currentOfferId: state.offerId,
   currentCityOffers: getOffersByCityId(state.offers, state.cityId),
   user: state.user,
-  reviews: state.reviews
+  reviews: state.reviews,
+  sort: state.sort,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -185,6 +207,11 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator[Action.CHANGE_USER]({}));
     dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
   },
+  onSort: (sortOptions) => {
+    dispatch(Operation.sortOffers(sortOptions));
+    const url = `${window.location.pathname}?${setSortOptionsToUrl(window.location, sortOptions)}`;
+    history.replace(url);
+  }
 });
 
 export {App};

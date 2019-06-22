@@ -1,8 +1,10 @@
 import React from "react";
-import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import {SortField, SortOrder} from "../../data";
 
-const getOptionById = (options = [], id = -1) => options.find((item) => item.id === id);
+const sortToString = (sort) => `${sort.field}:${sort.order}`;
+const compareSortOptions = (sort1, sort2) => sortToString(sort1) === sortToString(sort2);
+const getOptionBySort = (options = [], activeSort = {}) => options.find((item) => compareSortOptions(item.sort, activeSort));
 
 class SortList extends React.PureComponent {
   constructor(props) {
@@ -18,10 +20,14 @@ class SortList extends React.PureComponent {
 
     const {
       sortOptions = [],
-      activeSortOptionId = -1
+      activeSort = {
+        field: SortField.ID,
+        order: SortOrder.ASC
+      },
     } = this.props;
 
-    const {title: activeSortTitle = ``} = getOptionById(sortOptions, activeSortOptionId);
+    const activeSortOption = getOptionBySort(sortOptions, activeSort);
+    const {title: activeSortTitle = ``} = activeSortOption;
 
     return (
       <form className="places__sorting" action="#" method="get">
@@ -34,20 +40,24 @@ class SortList extends React.PureComponent {
         </span>
         <ul className={`places__options places__options--custom ${opened ? ` places__options--opened` : ``}`}>
           {sortOptions.map((option, index) => (
-            <Link to={option.id > 0 ? `?sort=${option.id}` : `/`} onClick={this._handleSortOptionClick} key={`sort-options-${index}`} className={`places__option${option.id === activeSortOptionId ? ` places__option--active` : ``}`} tabIndex="0">{option.title}</Link>
+            <li onClick={this._handleSortOptionClick} key={`sort-options-${index}`} className={`places__option${option === activeSortOption ? ` places__option--active` : ``}`} tabIndex="0" data-sort={option.sort.field} data-order={option.sort.order}>{option.title}</li>
           ))}
         </ul>
       </form>
     );
   }
 
-  _handleSortClick(event) {
-    event.preventDefault();
+  _handleSortClick() {
     this._invertOpenedState();
   }
 
-  _handleSortOptionClick() {
+  _handleSortOptionClick(event) {
+    const {onSort} = this.props;
     this._invertOpenedState();
+    onSort({
+      field: event.target.dataset.sort,
+      order: event.target.dataset.order,
+    });
   }
 
   _invertOpenedState() {
@@ -60,10 +70,17 @@ class SortList extends React.PureComponent {
 
 SortList.propTypes = {
   sortOptions: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    title: PropTypes.string
+    title: PropTypes.string,
+    sort: PropTypes.shape({
+      field: PropTypes.string,
+      order: PropTypes.string
+    }),
   })),
-  activeSortOptionId: PropTypes.number
+  activeSort: PropTypes.shape({
+    field: PropTypes.string,
+    order: PropTypes.string
+  }),
+  onSort: PropTypes.func
 };
 
 
