@@ -3,6 +3,8 @@ import renderer from "react-test-renderer";
 import {AccommodationType} from "../../data";
 import MainPage from "./main-page";
 import {Cities} from "../../mocks/cities";
+import {Router} from "react-router-dom";
+import history from "../../history";
 
 const mock = [
   {
@@ -84,6 +86,11 @@ const cityMock = {
 it(`Main page renders correctly`, () => {
   const onSelectOffer = jest.fn();
   const onChangeCity = jest.fn();
-  const tree = renderer.create(<MainPage cities={Cities} offers={mock} cityId={cityMock.id} onSelectOffer={onSelectOffer} onChangeCity={onChangeCity}/>);
+  const onSort = jest.fn();
+  const tree = renderer.create(
+      <Router history={history}>
+        <MainPage cities={Cities} offers={mock} cityId={cityMock.id} onSelectOffer={onSelectOffer} onChangeCity={onChangeCity} onSort={onSort}/>
+      </Router>
+  );
   expect(tree).toMatchSnapshot();
 });

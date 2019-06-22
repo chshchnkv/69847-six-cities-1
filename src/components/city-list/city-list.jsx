@@ -3,25 +3,23 @@ import PropTypes from "prop-types";
 import City from "../city/city";
 
 
-class CityList extends React.PureComponent {
-  render() {
-    const {
-      cities,
-      activeItem,
-      onChangeCity,
-    } = this.props;
+const CityList = (props) => {
+  const {
+    cities,
+    activeItem,
+    onChangeCity,
+  } = props;
 
-    return (
-      <ul className="locations__list tabs__list">
-        {cities.map((city, i) => (
-          <li className="locations__item" key={`city-${i}`}>
-            <City id={city.id} title={city.name} isActive={activeItem === city.id} onActivateCity={onChangeCity} longitude={city.location.longitude} latitude={city.location.latitude}/>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
+  return (
+    <ul className="locations__list tabs__list">
+      {cities.map((city, i) => (
+        <li className="locations__item" key={`city-${i}`}>
+          <City id={city.id} title={city.name} isActive={activeItem === city.id} onActivateCity={onChangeCity} longitude={city.location.longitude} latitude={city.location.latitude}/>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 CityList.propTypes = {
   cities: PropTypes.arrayOf(PropTypes.shape({

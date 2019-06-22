@@ -2,6 +2,8 @@ import React from "react";
 import renderer from "react-test-renderer";
 import {AccommodationType} from "../../data";
 import PlaceCard from "./place-card";
+import history from "../../history";
+import {Router} from "react-router-dom";
 
 const mock = {
   id: 1,
@@ -14,6 +16,9 @@ const mock = {
 };
 
 it(`Place card renders correctly`, () => {
-  const tree = renderer.create(<PlaceCard place={mock}/>);
+  const tree = renderer.create(
+      <Router history={history}>
+        <PlaceCard place={mock}/>
+      </Router>);
   expect(tree).toMatchSnapshot();
 });

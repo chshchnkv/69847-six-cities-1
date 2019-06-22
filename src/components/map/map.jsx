@@ -7,7 +7,7 @@ class Map extends React.PureComponent {
     super(props);
 
     this._icon = leaflet.icon({
-      iconUrl: `img/pin.svg`,
+      iconUrl: `/img/pin.svg`,
       iconSize: [30, 30]
     });
 
@@ -21,7 +21,7 @@ class Map extends React.PureComponent {
     } = this.props;
 
     const {
-      zoom,
+      zoom = 12,
       longitude,
       latitude
     } = this._getMapCenter();

@@ -2,6 +2,8 @@ import React from "react";
 import renderer from "react-test-renderer";
 import {AccommodationType} from "../../data";
 import OffersList from "./offers-list";
+import history from "../../history";
+import {Router} from "react-router-dom";
 
 const mock = [
   {
@@ -48,6 +50,10 @@ const mock = [
 ];
 
 it(`Offers list renders correctly`, () => {
-  const tree = renderer.create(<OffersList offers={mock}/>);
+  const tree = renderer.create(
+      <Router history={history}>
+        <OffersList offers={mock}/>
+      </Router>
+  );
   expect(tree).toMatchSnapshot();
 });

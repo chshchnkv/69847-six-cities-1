@@ -1,12 +1,13 @@
 import React from "react";
 import OffersList from "../offers-list/offers-list";
 import PropTypes from "prop-types";
-import {AccommodationType} from "../../data";
+import {AccommodationType, sortOptions} from "../../data";
 import Map from "../map/map";
 import {getCityInfoById} from "../../utils";
 import withActiveItem from "../../hocs/with-active-item/with-active-item";
 import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 import CityList from "../city-list/city-list";
+import SortList from "../sort-list/sort-list";
 
 const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
   Object.assign({}, props, {
@@ -20,7 +21,6 @@ const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) 
   });
 })(CityList));
 
-
 const MainPage = (props) => {
   const {
     cities,
@@ -28,14 +28,15 @@ const MainPage = (props) => {
     offers,
     offerId,
     onSelectOffer,
-    onChangeCity
+    onChangeCity,
+    sort,
+    onSort
   } = props;
 
   const {
     name,
     location
   } = getCityInfoById(cities, cityId);
-
 
   return (
     <main className="page__main page__main--index">
@@ -51,21 +52,7 @@ const MainPage = (props) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex="0">
-              Popular
-                <svg className="places__sorting-arrow" width="7" height="4">
-                  <use xlinkHref="#icon-arrow-select"/>
-                </svg>
-              </span>
-              <ul className="places__options places__options--custom places__options--opened">
-                <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                <li className="places__option" tabIndex="0">Price: low to high</li>
-                <li className="places__option" tabIndex="0">Price: high to low</li>
-                <li className="places__option" tabIndex="0">Top rated first</li>
-              </ul>
-            </form>
+            <SortList sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
             <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
           </section>
           <div className="cities__right-section">
@@ -105,8 +92,13 @@ MainPage.propTypes = {
     })
   })),
   onSelectOffer: PropTypes.func.isRequired,
+  onSort: PropTypes.func,
   offerId: PropTypes.number,
-  onChangeCity: PropTypes.func.isRequired
+  onChangeCity: PropTypes.func.isRequired,
+  sort: PropTypes.shape({
+    field: PropTypes.string,
+    order: PropTypes.string
+  }),
 };
 
 export default MainPage;

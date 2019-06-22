@@ -4,23 +4,30 @@ import {AccommodationType} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
-import {getOffersByCityId} from "../../utils";
+import {getNearOffersById, getOfferById, getOffersByCityId, setSortOptionsToUrl} from "../../utils";
 import SignIn from "../sign-in/sign-in";
 import {Switch, Route, Link} from "react-router-dom";
 import {PrivateRoute} from "../private-route/private-route";
 import Favorites from "../favorites/favorites";
+import Property from "../property/property";
+import history from "../../history";
 
 class App extends React.Component {
   render() {
     const {
       cities,
       offers,
+      reviews = [],
       currentCityId,
       currentOfferId,
       currentCityOffers,
       onChangeCity,
       onSelectOffer,
+      onLoadOfferReviews,
       onLogin,
+      onPostReview,
+      sort,
+      onSort,
       user = {}
     } = this.props;
 
@@ -35,7 +42,7 @@ class App extends React.Component {
             <div className="header__wrapper">
               <div className="header__left">
                 <Link to="/" className="header__logo-link header__logo-link--active">
-                  <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
+                  <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
                 </Link>
               </div>
               <nav className="header__nav">
@@ -48,8 +55,32 @@ class App extends React.Component {
         </header>
 
         <Switch>
-          <Route path="/" exact render = {() => <MainPage cityId={currentCityId} offers={currentCityOffers} cities={cities} onSelectOffer={onSelectOffer} offerId={currentOfferId} onChangeCity={onChangeCity} />}/>
+          <Route path="/" exact render = {() => {
+            return <MainPage
+              cityId={currentCityId}
+              offers={currentCityOffers}
+              cities={cities}
+              sort={sort}
+              onSelectOffer={onSelectOffer}
+              offerId={currentOfferId}
+              onChangeCity={onChangeCity}
+              onSort={onSort}/>;
+          }}/>
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
+          <Route path="/offer/:id" render = {({match}) => {
+            const offer = getOfferById(offers, parseInt(match.params.id, 10));
+            const {id} = offer;
+
+            return <Property
+              place={offer}
+              nearPlaces={getNearOffersById(offers, id)}
+              reviews={reviews}
+              onRequestComments={onLoadOfferReviews}
+              user={user}
+              cities={cities}
+              onPostComment={onPostReview}
+            />;
+          }}/>
           <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
         </Switch>
 
@@ -69,7 +100,7 @@ class App extends React.Component {
     } = user;
 
     return (
-      <Link className="header__nav-link header__nav-link--profile" href="#" to={userId < 0 ? `/login` : `/`}>
+      <Link className="header__nav-link header__nav-link--profile" href="#" to="/favorites">
         <div className="header__avatar-wrapper user__avatar-wrapper">{userAvatar === `` ? `` : <img src={userAvatar}/>}</div>
         <span className="header__user-name user__name">{userId < 0 ? `Sign in` : userName}</span>
       </Link>
@@ -104,6 +135,18 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
+  reviews: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    user: PropTypes.shape({
+      id: PropTypes.number,
+      isPro: PropTypes.bool,
+      name: PropTypes.string,
+      avatarUrl: PropTypes.string
+    }),
+    rating: PropTypes.number,
+    comment: PropTypes.string,
+    date: PropTypes.string
+  })),
   user: PropTypes.shape({
     id: PropTypes.number,
     email: PropTypes.string,
@@ -111,10 +154,17 @@ App.propTypes = {
     avatarUrl: PropTypes.string,
     isPro: PropTypes.bool
   }),
+  sort: PropTypes.shape({
+    field: PropTypes.string,
+    order: PropTypes.string
+  }),
   onChangeCity: PropTypes.func,
   onSelectOffer: PropTypes.func,
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
+  onLoadOfferReviews: PropTypes.func,
+  onPostReview: PropTypes.func,
+  onSort: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -124,6 +174,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   currentOfferId: state.offerId,
   currentCityOffers: getOffersByCityId(state.offers, state.cityId),
   user: state.user,
+  reviews: state.reviews,
+  sort: state.sort,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -134,12 +186,23 @@ const mapDispatchToProps = (dispatch) => ({
   onSelectOffer: (offerId) => {
     dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));
   },
+  onLoadOfferReviews: (offerId) => {
+    dispatch(Operation.loadComments(offerId));
+  },
+  onPostReview: (propertyId, rating, comment) => {
+    dispatch(Operation.postComment(propertyId, rating, comment));
+  },
   onLogin: (email, password) => {
     dispatch(Operation.login(email, password));
   },
   onLogout: () => {
     dispatch(ActionCreator[Action.CHANGE_USER]({}));
     dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
+  },
+  onSort: (sortOptions) => {
+    dispatch(Operation.sortOffers(sortOptions));
+    const url = `${window.location.pathname}?${setSortOptionsToUrl(window.location, sortOptions)}`;
+    history.replace(url);
   }
 });
 
