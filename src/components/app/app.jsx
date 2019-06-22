@@ -13,14 +13,6 @@ import Property from "../property/property";
 import history from "../../history";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      sortOption: 0
-    };
-  }
-
   render() {
     const {
       cities,
