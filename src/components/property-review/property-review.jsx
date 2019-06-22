@@ -33,7 +33,7 @@ const PropertyReview = (props) => {
           </div>
         </div>
         <p className="reviews__text">{comment}</p>
-        <time className="reviews__time" dateTime={date}>{dateParsed.toLocaleString(`en-us`,{month: `long`})} {dateParsed.getDate()}, {dateParsed.getFullYear()}</time>
+        <time className="reviews__time" dateTime={date}>{dateParsed.toLocaleString(`en-us`, {month: `long`})} {dateParsed.getDate()}, {dateParsed.getFullYear()}</time>
       </div>
     </React.Fragment>
   );

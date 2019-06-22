@@ -37,14 +37,14 @@ class CommentForm extends React.PureComponent {
           {Object.keys(ratingValues).map((id) => {
             return (
               <React.Fragment key={`star-${id}`}>
-                <input className="form__rating-input visually-hidden" name="rating" value={id} id={`${id}-stars`} type="radio" onChange={this._handleRatingChange} checked={rating === parseInt(id) ? `checked`: ``}/>
+                <input className="form__rating-input visually-hidden" name="rating" value={id} id={`${id}-stars`} type="radio" onChange={this._handleRatingChange} checked={rating === parseInt(id, 10) ? `checked` : ``}/>
                 <label htmlFor={`${id}-stars`} className="reviews__rating-label form__rating-label" title={ratingValues[id]}>
                   <svg className="form__star-image" width="37" height="33">
                     <use xlinkHref="#icon-star"/>
                   </svg>
                 </label>
               </React.Fragment>
-            )
+            );
           })}
         </div>
         <textarea value={comment} className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" onChange={this._handleCommentChange}/>

@@ -23,7 +23,7 @@ Array [
               alt="6 cities logo"
               className="header__logo"
               height="41"
-              src="img/logo.svg"
+              src="/img/logo.svg"
               width="81"
             />
           </a>
@@ -39,7 +39,7 @@ Array [
             >
               <a
                 className="header__nav-link header__nav-link--profile"
-                href="/login"
+                href="/favorites"
                 onClick={[Function]}
               >
                 <div
@@ -192,6 +192,7 @@ Array [
             </span>
             <span
               className="places__sorting-type"
+              onClick={[Function]}
               tabIndex="0"
             >
               Popular
@@ -206,28 +207,40 @@ Array [
               </svg>
             </span>
             <ul
-              className="places__options places__options--custom places__options--opened"
+              className="places__options places__options--custom "
             >
               <li
                 className="places__option places__option--active"
+                data-order="asc"
+                data-sort="id"
+                onClick={[Function]}
                 tabIndex="0"
               >
                 Popular
               </li>
               <li
                 className="places__option"
+                data-order="asc"
+                data-sort="price"
+                onClick={[Function]}
                 tabIndex="0"
               >
                 Price: low to high
               </li>
               <li
                 className="places__option"
+                data-order="desc"
+                data-sort="price"
+                onClick={[Function]}
                 tabIndex="0"
               >
                 Price: high to low
               </li>
               <li
                 className="places__option"
+                data-order="desc"
+                data-sort="rank"
+                onClick={[Function]}
                 tabIndex="0"
               >
                 Top rated first

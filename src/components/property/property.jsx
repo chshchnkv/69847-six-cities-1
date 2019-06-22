@@ -7,7 +7,7 @@ import withActiveItem from "../../hocs/with-active-item/with-active-item";
 import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 import PropertyReviewsList from "../property-reviews-list/property-reviews-list";
 import Map from "../map/map";
-import CommentForm from "../app/comment-form/comment-form";
+import CommentForm from "../comment-form/comment-form";
 
 const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
   Object.assign({}, props, {
@@ -59,7 +59,7 @@ class Property extends React.Component {
       location,
     } = place;
 
-    const mapLocation = getCityInfoById(cities, city).location;
+    const {location: mapLocation} = getCityInfoById(cities, city);
 
     const mapPins = nearPlaces.map((offer) => offer.location);
     mapPins.unshift(location);
