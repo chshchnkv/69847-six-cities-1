@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {AccommodationType} from "../../data";
+import {AccommodationType, ratings} from "../../data";
 import MainPage from "../main-page/main-page";
 import {Action, ActionCreator, Operation} from "../../reducer";
 import {connect} from "react-redux";
@@ -28,7 +28,8 @@ class App extends React.Component {
       onPostReview,
       sort,
       onSort,
-      user = {}
+      user = {},
+      isSendingComment
     } = this.props;
 
     if (cities.length === 0 || offers.length === 0) {
@@ -79,6 +80,8 @@ class App extends React.Component {
               user={user}
               cities={cities}
               onPostComment={onPostReview}
+              ratings={ratings}
+              isCommentSending={isSendingComment}
             />;
           }}/>
           <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
@@ -158,6 +161,7 @@ App.propTypes = {
     field: PropTypes.string,
     order: PropTypes.string
   }),
+  isSendingComment: PropTypes.bool,
   onChangeCity: PropTypes.func,
   onSelectOffer: PropTypes.func,
   onLogin: PropTypes.func,
@@ -176,6 +180,7 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   user: state.user,
   reviews: state.reviews,
   sort: state.sort,
+  isSendingComment: state.isSendingComment
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -190,7 +195,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(Operation.loadComments(offerId));
   },
   onPostReview: (propertyId, rating, comment) => {
-    dispatch(Operation.postComment(propertyId, rating, comment));
+    return dispatch(Operation.postComment(propertyId, rating, comment));
   },
   onLogin: (email, password) => {
     dispatch(Operation.login(email, password));

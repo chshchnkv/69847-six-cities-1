@@ -10,15 +10,13 @@ class SortList extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {opened: false};
-
-    this._handleSortClick = this._handleSortClick.bind(this);
     this._handleSortOptionClick = this._handleSortOptionClick.bind(this);
   }
-  render() {
-    const {opened} = this.state;
 
+  render() {
     const {
+      onClickOpen,
+      isOpened = false,
       sortOptions = [],
       activeSort = {
         field: SortField.ID,
@@ -32,13 +30,13 @@ class SortList extends React.PureComponent {
     return (
       <form className="places__sorting" action="#" method="get">
         <span className="places__sorting-caption">Sort by</span>
-        <span className="places__sorting-type" tabIndex="0" onClick={this._handleSortClick}>
+        <span className="places__sorting-type" tabIndex="0" onClick={onClickOpen}>
           {activeSortTitle}
           <svg className="places__sorting-arrow" width="7" height="4">
             <use xlinkHref="#icon-arrow-select"/>
           </svg>
         </span>
-        <ul className={`places__options places__options--custom ${opened ? ` places__options--opened` : ``}`}>
+        <ul className={`places__options places__options--custom ${isOpened ? ` places__options--opened` : ``}`}>
           {sortOptions.map((option, index) => (
             <li onClick={this._handleSortOptionClick} key={`sort-options-${index}`} className={`places__option${option === activeSortOption ? ` places__option--active` : ``}`} tabIndex="0" data-sort={option.sort.field} data-order={option.sort.order}>{option.title}</li>
           ))}
@@ -47,23 +45,15 @@ class SortList extends React.PureComponent {
     );
   }
 
-  _handleSortClick() {
-    this._invertOpenedState();
-  }
-
   _handleSortOptionClick(event) {
-    const {onSort} = this.props;
-    this._invertOpenedState();
+    const {
+      onClickOpen,
+      onSort
+    } = this.props;
+    onClickOpen();
     onSort({
       field: event.target.dataset.sort,
       order: event.target.dataset.order,
-    });
-  }
-
-  _invertOpenedState() {
-    const {opened} = this.state;
-    this.setState({
-      opened: !opened
     });
   }
 }
@@ -80,7 +70,9 @@ SortList.propTypes = {
     field: PropTypes.string,
     order: PropTypes.string
   }),
-  onSort: PropTypes.func
+  isOpened: PropTypes.bool,
+  onSort: PropTypes.func,
+  onClickOpen: PropTypes.func
 };
 
 
