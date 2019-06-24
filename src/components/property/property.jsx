@@ -8,12 +8,15 @@ import withTransformProps from "../../hocs/with-transform-props/with-transform-p
 import PropertyReviewsList from "../property-reviews-list/property-reviews-list";
 import Map from "../map/map";
 import CommentForm from "../comment-form/comment-form";
+import withValidation from "../../hocs/with-validation-form/with-validation-form";
 
 const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
   Object.assign({}, props, {
     onImageClick: props.onChangeActiveItem
   })
 ))(OffersList));
+
+const CommentFormWithValidation = withValidation(CommentForm);
 
 class Property extends React.Component {
   constructor(props) {
@@ -40,7 +43,9 @@ class Property extends React.Component {
       nearPlaces = [],
       user = {},
       cities = [],
-      onPostComment
+      ratings = [],
+      onPostComment,
+      isCommentSending = false
     } = this.props;
 
     const {
@@ -142,7 +147,7 @@ class Property extends React.Component {
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                 <PropertyReviewsList reviews={reviews}/>
 
-                {userId < 0 ? null : (<CommentForm onPostComment={onPostComment} propertyId={propertyId}/>)}
+                {userId < 0 ? null : (<CommentFormWithValidation isSending={isCommentSending} ratings={ratings} onPostComment={onPostComment} propertyId={propertyId}/>)}
 
               </section>
             </div>
@@ -232,6 +237,11 @@ Property.propTypes = {
       zoom: PropTypes.number
     })
   })),
+  ratings: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.number,
+    title: PropTypes.string
+  })),
+  isCommentSending: PropTypes.bool,
   onRequestComments: PropTypes.func,
   onPostComment: PropTypes.func
 };

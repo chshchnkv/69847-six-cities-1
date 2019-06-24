@@ -260,6 +260,7 @@ exports[` 1`] = `
           <form
             action="#"
             className="reviews__form form"
+            disabled={false}
             method="post"
             onSubmit={[Function]}
           >
@@ -271,135 +272,13 @@ exports[` 1`] = `
             </label>
             <div
               className="reviews__rating-form form__rating"
-            >
-              <input
-                checked=""
-                className="form__rating-input visually-hidden"
-                id="1-stars"
-                name="rating"
-                onChange={[Function]}
-                type="radio"
-                value="1"
-              />
-              <label
-                className="reviews__rating-label form__rating-label"
-                htmlFor="1-stars"
-                title="terribly"
-              >
-                <svg
-                  className="form__star-image"
-                  height="33"
-                  width="37"
-                >
-                  <use
-                    xlinkHref="#icon-star"
-                  />
-                </svg>
-              </label>
-              <input
-                checked=""
-                className="form__rating-input visually-hidden"
-                id="2-stars"
-                name="rating"
-                onChange={[Function]}
-                type="radio"
-                value="2"
-              />
-              <label
-                className="reviews__rating-label form__rating-label"
-                htmlFor="2-stars"
-                title="badly"
-              >
-                <svg
-                  className="form__star-image"
-                  height="33"
-                  width="37"
-                >
-                  <use
-                    xlinkHref="#icon-star"
-                  />
-                </svg>
-              </label>
-              <input
-                checked=""
-                className="form__rating-input visually-hidden"
-                id="3-stars"
-                name="rating"
-                onChange={[Function]}
-                type="radio"
-                value="3"
-              />
-              <label
-                className="reviews__rating-label form__rating-label"
-                htmlFor="3-stars"
-                title="not bad"
-              >
-                <svg
-                  className="form__star-image"
-                  height="33"
-                  width="37"
-                >
-                  <use
-                    xlinkHref="#icon-star"
-                  />
-                </svg>
-              </label>
-              <input
-                checked=""
-                className="form__rating-input visually-hidden"
-                id="4-stars"
-                name="rating"
-                onChange={[Function]}
-                type="radio"
-                value="4"
-              />
-              <label
-                className="reviews__rating-label form__rating-label"
-                htmlFor="4-stars"
-                title="good"
-              >
-                <svg
-                  className="form__star-image"
-                  height="33"
-                  width="37"
-                >
-                  <use
-                    xlinkHref="#icon-star"
-                  />
-                </svg>
-              </label>
-              <input
-                checked=""
-                className="form__rating-input visually-hidden"
-                id="5-stars"
-                name="rating"
-                onChange={[Function]}
-                type="radio"
-                value="5"
-              />
-              <label
-                className="reviews__rating-label form__rating-label"
-                htmlFor="5-stars"
-                title="perfect"
-              >
-                <svg
-                  className="form__star-image"
-                  height="33"
-                  width="37"
-                >
-                  <use
-                    xlinkHref="#icon-star"
-                  />
-                </svg>
-              </label>
-            </div>
+            />
             <textarea
               className="reviews__textarea form__textarea"
               id="review"
               name="review"
               onChange={[Function]}
               placeholder="Tell how was your stay, what you like and what can be improved"
-              value=""
             />
             <div
               className="reviews__button-wrapper"
@@ -423,7 +302,7 @@ exports[` 1`] = `
               </p>
               <button
                 className="reviews__submit form__submit button"
-                disabled="disabled"
+                disabled={true}
                 type="submit"
               >
                 Submit

@@ -8,6 +8,7 @@ import withActiveItem from "../../hocs/with-active-item/with-active-item";
 import withTransformProps from "../../hocs/with-transform-props/with-transform-props";
 import CityList from "../city-list/city-list";
 import SortList from "../sort-list/sort-list";
+import withOpened from "../../hocs/with-opened/with-opened";
 
 const OffersListWithActiveItemWrapped = withActiveItem(withTransformProps((props) => (
   Object.assign({}, props, {
@@ -20,6 +21,8 @@ const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) 
     onChangeCity: props.onChangeActiveItem
   });
 })(CityList));
+
+const SortListWithOpened = withOpened(SortList);
 
 const MainPage = (props) => {
   const {
@@ -52,7 +55,7 @@ const MainPage = (props) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
-            <SortList sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
+            <SortListWithOpened sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
             <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
           </section>
           <div className="cities__right-section">

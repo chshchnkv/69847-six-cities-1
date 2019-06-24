@@ -1,5 +1,6 @@
 import {getNewId, sortOffers} from "./utils";
 import history from "./history";
+import {SortField, SortOrder} from "./data";
 
 const initialState = {
   cityId: -1,
@@ -7,7 +8,12 @@ const initialState = {
   cities: [],
   offers: [],
   isAuthorizationRequired: false,
-  user: {}
+  user: {},
+  sortOptions: {
+    field: SortField.ID,
+    order: SortOrder.ASC
+  },
+  isSendingComment: false
 };
 
 export const Action = {
@@ -19,6 +25,7 @@ export const Action = {
   CHANGE_USER: `change_user`,
   LOAD_REVIEWS: `load_reviews`,
   SORT_OPTIONS: `sort`,
+  SET_COMMENT_SENDING: `set_comment_sending`,
 };
 
 export const ActionCreator = {
@@ -66,6 +73,11 @@ export const ActionCreator = {
   [Action.SORT_OPTIONS]: (sortOptions) => ({
     type: Action.SORT_OPTIONS,
     payload: sortOptions
+  }),
+
+  [Action.SET_COMMENT_SENDING]: (isSendingComment) => ({
+    type: Action.SET_COMMENT_SENDING,
+    payload: isSendingComment
   }),
 };
 
@@ -138,12 +150,17 @@ export const Operation = {
   },
 
   postComment: (propertyId, rating, comment) => (dispatch, _getState, api) => {
-    return api.post(`/comment/${propertyId}`, {
+    dispatch(ActionCreator[Action.SET_COMMENT_SENDING](true));
+    return api.post(`/comments/${propertyId}`, {
       rating,
       comment
     }).then((response) => {
       dispatch(ActionCreator[Action.LOAD_REVIEWS](response.data));
-    }).catch(() => alert(`Something went wrong :(`));
+      dispatch(ActionCreator[Action.SET_COMMENT_SENDING](false));
+    }).catch(() => {
+      dispatch(ActionCreator[Action.SET_COMMENT_SENDING](false));
+      alert(`Something went wrong :(`);
+    });
   },
 
   sortOffers: (sortOptions) => (dispatch, _getState, api) => {
@@ -186,6 +203,10 @@ export const reducer = (state = initialState, action) => {
     case Action.SORT_OPTIONS:
       return Object.assign({}, state, {
         sort: action.payload
+      });
+    case Action.SET_COMMENT_SENDING:
+      return Object.assign({}, state, {
+        isSendingComment: action.payload
       });
   }
   return state;

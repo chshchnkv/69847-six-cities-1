@@ -23,5 +23,9 @@ export const PrivateRoute = ({component: Component, user, ...rest}) => {
 PrivateRoute.propTypes = {
   component: PropTypes.shape(),
   user: PropTypes.shape(),
-  location: PropTypes.string
+  location: PropTypes.shape({
+    longitude: PropTypes.number,
+    latitude: PropTypes.number,
+    zoom: PropTypes.number
+  })
 };
