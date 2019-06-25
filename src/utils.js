@@ -32,6 +32,21 @@ export const sortOffers = (offersList, sortOptions) => {
       clone.sort((a, b) => (a.rating - b.rating) * orderMultiplier);
       break;
     }
+    case SortField.CITY: {
+      clone.sort((a, b) => {
+        const {city: {name: nameA}} = a;
+        const {city: {name: nameB}} = b;
+        const cityNameA = nameA.toLowerCase().trim();
+        const cityNameB = nameB.toLowerCase().trim();
+        if (cityNameA === cityNameB) {
+          return 0;
+        } else if (cityNameA > cityNameB) {
+          return orderMultiplier;
+        } else {
+          return -1 * orderMultiplier;
+        }
+      });
+    }
   }
   return clone;
 };

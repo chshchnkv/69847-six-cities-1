@@ -33,6 +33,7 @@ const initialState = {
   offerId: -1,
   cities: [],
   offers: [],
+  favorites: [],
   loggedIn: false,
   user: {},
   sortOptions: {
@@ -221,7 +222,31 @@ export const Operation = {
   loadFavorites: () => (dispatch, _getState, api) => {
     return api.get(`/favorite`)
       .then((response) => {
-        dispatch(ActionCreator[Action.SET_FAVORITES](response.data));
+        const {cities} = _getState();
+        const sortedCities = cities.slice(0).sort((a, b) => {
+          const {name: nameA} = a;
+          const {name: nameB} = b;
+          const cityNameA = nameA.toLowerCase().trim();
+          const cityNameB = nameB.toLowerCase().trim();
+          if (cityNameA === cityNameB) {
+            return 0;
+          } else if (cityNameA > cityNameB) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+
+        const favoriteOffers = response.data.map((offer) => serverOfferToOffer(offer, cities));
+
+        const result = sortedCities
+          .map((city) => ({
+            cityId: city.id,
+            offers: favoriteOffers.filter((offer) => offer.city === city.id)
+          }))
+          .filter((item) => item.offers.length > 0);
+
+        dispatch(ActionCreator[Action.SET_FAVORITES](result));
       })
       .catch(() => alert(`Something went wrong :(`));
   },

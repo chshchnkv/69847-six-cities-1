@@ -18,12 +18,14 @@ class App extends React.Component {
       cities,
       offers,
       reviews = [],
+      favorites = [],
       currentCityId,
       currentOfferId,
       currentCityOffers,
       onChangeCity,
       onSelectOffer,
       onLoadOfferReviews,
+      onLoadFavorites,
       onLogin,
       onPostReview,
       sort,
@@ -87,7 +89,7 @@ class App extends React.Component {
               isCommentSending={isSendingComment}
             />;
           }}/>
-          <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
+          <PrivateRoute path="/favorites" user={user} cities={cities} onLoadFavorites={onLoadFavorites} favorites={favorites} component={Favorites}/>
         </Switch>
 
       </React.Fragment>
@@ -141,6 +143,23 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
+  favorites: PropTypes.arrayOf(PropTypes.shape({
+    cityId: PropTypes.number,
+    offers: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      src: PropTypes.string,
+      rating: PropTypes.number,
+      price: PropTypes.number,
+      isPremium: PropTypes.bool,
+      type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
+      location: PropTypes.shape({
+        city: PropTypes.number,
+        longitude: PropTypes.number.isRequired,
+        latitude: PropTypes.number.isRequired
+      })
+    }))
+  })),
   reviews: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     user: PropTypes.shape({
@@ -170,6 +189,7 @@ App.propTypes = {
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
   onLoadOfferReviews: PropTypes.func,
+  onLoadFavorites: PropTypes.func,
   onPostReview: PropTypes.func,
   onSort: PropTypes.func,
   onChangeFavorite: PropTypes.func,
@@ -184,7 +204,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   user: state.user,
   reviews: state.reviews,
   sort: state.sort,
-  isSendingComment: state.isSendingComment
+  isSendingComment: state.isSendingComment,
+  favorites: state.favorites,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -197,6 +218,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onLoadOfferReviews: (offerId) => {
     dispatch(Operation.loadComments(offerId));
+  },
+  onLoadFavorites: () => {
+    return dispatch(Operation.loadFavorites());
   },
   onPostReview: (propertyId, rating, comment) => {
     return dispatch(Operation.postComment(propertyId, rating, comment));
