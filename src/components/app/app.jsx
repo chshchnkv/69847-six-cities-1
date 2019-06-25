@@ -28,6 +28,7 @@ class App extends React.Component {
       onPostReview,
       sort,
       onSort,
+      onChangeFavorite,
       user = {},
       isSendingComment
     } = this.props;
@@ -65,7 +66,9 @@ class App extends React.Component {
               onSelectOffer={onSelectOffer}
               offerId={currentOfferId}
               onChangeCity={onChangeCity}
-              onSort={onSort}/>;
+              onSort={onSort}
+              onChangeFavorite={onChangeFavorite}
+            />;
           }}/>
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
           <Route path="/offer/:id" render = {({match}) => {
@@ -169,6 +172,7 @@ App.propTypes = {
   onLoadOfferReviews: PropTypes.func,
   onPostReview: PropTypes.func,
   onSort: PropTypes.func,
+  onChangeFavorite: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -201,13 +205,15 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(Operation.login(email, password));
   },
   onLogout: () => {
-    dispatch(ActionCreator[Action.CHANGE_USER]({}));
-    dispatch(ActionCreator[Action.AUTHORIZATION_REQUIRED](false));
+    dispatch(Operation.logout());
   },
   onSort: (sortOptions) => {
     dispatch(Operation.sortOffers(sortOptions));
     const url = `${window.location.pathname}?${setSortOptionsToUrl(window.location, sortOptions)}`;
     history.replace(url);
+  },
+  onChangeFavorite: (propertyId, isFavorite) => {
+    dispatch(Operation.postFavorite(propertyId, isFavorite));
   }
 });
 

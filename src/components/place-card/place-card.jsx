@@ -9,6 +9,7 @@ class PlaceCard extends React.PureComponent {
     super(props);
 
     this._handleCardImageClick = this._handleCardImageClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   render() {
@@ -19,6 +20,7 @@ class PlaceCard extends React.PureComponent {
     const {
       id = 0,
       is_premium: isPremium = false,
+      is_favorite: isFavorite = false,
       title = ``,
       preview_image: src = ``,
       rating = 0,
@@ -43,7 +45,7 @@ class PlaceCard extends React.PureComponent {
               <b className="place-card__price-value">&euro;{price}</b>
               <span className="place-card__price-text">&#47;&nbsp;{PeriodType.NIGHT}</span>
             </div>
-            <button className="place-card__bookmark-button button" type="button">
+            <button onClick={this._handleFavoriteClick} className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`} type="button">
               <svg className="place-card__bookmark-icon" width="18" height="19">
                 <use xlinkHref="#icon-bookmark"/>
               </svg>
@@ -63,6 +65,20 @@ class PlaceCard extends React.PureComponent {
         </div>
       </article>
     );
+  }
+
+  _handleFavoriteClick() {
+    const {
+      place,
+      onFavoriteClick
+    } = this.props;
+
+    const {
+      id,
+      is_favorite: isFavorite = false,
+    } = place;
+
+    onFavoriteClick(id, !isFavorite);
   }
 
   _handleCardImageClick(event) {
@@ -91,6 +107,7 @@ PlaceCard.propTypes = {
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
   }).isRequired,
   onImageClick: PropTypes.func,
+  onFavoriteClick: PropTypes.func,
 };
 
 export default PlaceCard;

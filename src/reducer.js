@@ -1,13 +1,39 @@
-import {getNewId, sortOffers} from "./utils";
+import {getCityInfoByName, getNewId, getOfferIndexById, sortOffers} from "./utils";
 import history from "./history";
 import {SortField, SortOrder} from "./data";
+
+const serverOfferToOffer = (serverOffer, cities) => {
+  const {
+    city,
+    ...offer
+  } = serverOffer;
+
+  const {
+    location,
+    ...offerWithNoLocation
+  } = offer;
+
+  const {name: cityName} = city;
+
+  const cityInfo = getCityInfoByName(cities, cityName);
+  const {id: cityId} = cityInfo;
+
+  return {
+    ...offerWithNoLocation,
+    ...{city: cityId},
+    ...{location: {
+      longitude: location.latitude,
+      latitude: location.longitude,
+    }}
+  };
+};
 
 const initialState = {
   cityId: -1,
   offerId: -1,
   cities: [],
   offers: [],
-  isAuthorizationRequired: false,
+  loggedIn: false,
   user: {},
   sortOptions: {
     field: SortField.ID,
@@ -19,12 +45,13 @@ const initialState = {
 export const Action = {
   CHANGE_CITY: `change_city`,
   CHANGE_OFFER: `change_offer`,
-  SET_OFFERS: `set_offers`,
-  LOAD_CITIES: `load_cities`,
-  AUTHORIZATION_REQUIRED: `login`,
   CHANGE_USER: `change_user`,
+  LOAD_CITIES: `load_cities`,
   LOAD_REVIEWS: `load_reviews`,
   SORT_OPTIONS: `sort`,
+  SET_LOGGED_IN: `set_logged_in`,
+  SET_OFFERS: `set_offers`,
+  SET_FAVORITES: `set_favorites`,
   SET_COMMENT_SENDING: `set_comment_sending`,
 };
 
@@ -49,9 +76,9 @@ export const ActionCreator = {
     payload: cities
   }),
 
-  [Action.AUTHORIZATION_REQUIRED]: (authorizationRequired) => ({
-    type: Action.AUTHORIZATION_REQUIRED,
-    payload: authorizationRequired
+  [Action.SET_LOGGED_IN]: (loggedIn) => ({
+    type: Action.SET_LOGGED_IN,
+    payload: loggedIn
   }),
 
   [Action.CHANGE_USER]: (userInfo) => ({
@@ -78,6 +105,11 @@ export const ActionCreator = {
   [Action.SET_COMMENT_SENDING]: (isSendingComment) => ({
     type: Action.SET_COMMENT_SENDING,
     payload: isSendingComment
+  }),
+
+  [Action.SET_FAVORITES]: (favorites) => ({
+    type: Action.SET_FAVORITES,
+    payload: favorites
   }),
 };
 
@@ -137,16 +169,33 @@ export const Operation = {
       });
   },
 
+  getLogin: () => (dispatch, _getState, api) => {
+    return api.get(`/login`)
+      .then((response) => {
+        dispatch(ActionCreator[Action.SET_LOGGED_IN](true));
+        dispatch(ActionCreator[Action.CHANGE_USER](response.data));
+      })
+      .catch(() => {
+        dispatch(ActionCreator[Action.CHANGE_USER]({}));
+      });
+  },
+
   login: (email, password) => (dispatch, _getState, api) => {
     return api.post(`/login`, {
       email,
       password
     })
       .then((response) => {
+        dispatch(ActionCreator[Action.SET_LOGGED_IN](true));
         dispatch(ActionCreator[Action.CHANGE_USER](response.data));
         history.push(`/`);
       })
       .catch(() => alert(`Something went wrong :(`));
+  },
+
+  logout: () => (dispatch) => {
+    dispatch(ActionCreator[Action.SET_LOGGED_IN](false));
+    dispatch(ActionCreator[Action.CHANGE_USER]({}));
   },
 
   postComment: (propertyId, rating, comment) => (dispatch, _getState, api) => {
@@ -163,10 +212,34 @@ export const Operation = {
     });
   },
 
-  sortOffers: (sortOptions) => (dispatch, _getState, api) => {
+  sortOffers: (sortOptions) => (dispatch, _getState) => {
     const {offers} = _getState();
     dispatch(ActionCreator[Action.SORT_OPTIONS](sortOptions));
     dispatch(ActionCreator[Action.SET_OFFERS](sortOffers(offers, sortOptions)));
+  },
+
+  loadFavorites: () => (dispatch, _getState, api) => {
+    return api.get(`/favorite`)
+      .then((response) => {
+        dispatch(ActionCreator[Action.SET_FAVORITES](response.data));
+      })
+      .catch(() => alert(`Something went wrong :(`));
+  },
+
+  postFavorite: (propertyId, isFavorite) => (dispatch, _getState, api) => {
+    return api.post(`/favorite/${propertyId}/${isFavorite ? 1 : 0}`)
+      .then((response) => {
+        const {data: newPropertyData = null} = response || {};
+        if (newPropertyData) {
+          const {offers = [], cities} = _getState();
+          const index = getOfferIndexById(offers, propertyId);
+          if (index >= 0) {
+            const newProperty = serverOfferToOffer(newPropertyData, cities);
+            offers.splice(index, 1, newProperty);
+          }
+          dispatch(ActionCreator[Action.SET_OFFERS](offers));
+        }
+      });
   }
 };
 
@@ -188,9 +261,9 @@ export const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         offers: action.payload
       });
-    case Action.AUTHORIZATION_REQUIRED:
+    case Action.SET_LOGGED_IN:
       return Object.assign({}, state, {
-        isAuthorizationRequired: action.payload
+        loggedIn: action.payload
       });
     case Action.CHANGE_USER:
       return Object.assign({}, state, {
@@ -207,6 +280,10 @@ export const reducer = (state = initialState, action) => {
     case Action.SET_COMMENT_SENDING:
       return Object.assign({}, state, {
         isSendingComment: action.payload
+      });
+    case Action.SET_FAVORITES:
+      return Object.assign({}, state, {
+        favorites: action.payload
       });
   }
   return state;

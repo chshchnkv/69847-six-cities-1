@@ -6,12 +6,13 @@ import PlaceCard from "../place-card/place-card";
 const OffersList = (props) => {
   const {
     offers,
-    onImageClick
+    onImageClick,
+    onFavoriteClick,
   } = props;
 
   return (
     <div className="cities__places-list places__list tabs__content">
-      {offers.map((offer, i) => <PlaceCard key={i} place={offer} onImageClick={onImageClick}/>)}
+      {offers.map((offer, i) => <PlaceCard key={i} place={offer} onImageClick={onImageClick} onFavoriteClick={onFavoriteClick}/>)}
     </div>
   );
 };
@@ -26,7 +27,8 @@ OffersList.propTypes = {
     isPremium: PropTypes.bool,
     type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
   })).isRequired,
-  onImageClick: PropTypes.func
+  onImageClick: PropTypes.func,
+  onFavoriteClick: PropTypes.func,
 };
 
 export default OffersList;

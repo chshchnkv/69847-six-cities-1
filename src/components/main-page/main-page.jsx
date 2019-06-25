@@ -33,7 +33,8 @@ const MainPage = (props) => {
     onSelectOffer,
     onChangeCity,
     sort,
-    onSort
+    onSort,
+    onChangeFavorite,
   } = props;
 
   const {
@@ -56,7 +57,7 @@ const MainPage = (props) => {
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
             <SortListWithOpened sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
-            <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer}/>
+            <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer} onFavoriteClick={onChangeFavorite}/>
           </section>
           <div className="cities__right-section">
             <section className="cities__map map">
@@ -96,6 +97,7 @@ MainPage.propTypes = {
   })),
   onSelectOffer: PropTypes.func.isRequired,
   onSort: PropTypes.func,
+  onChangeFavorite: PropTypes.func,
   offerId: PropTypes.number,
   onChangeCity: PropTypes.func.isRequired,
   sort: PropTypes.shape({
