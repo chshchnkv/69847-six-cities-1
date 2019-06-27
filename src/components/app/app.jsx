@@ -75,11 +75,9 @@ class App extends React.Component {
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
           <Route path="/offer/:id" render = {({match}) => {
             const offer = getOfferById(offers, parseInt(match.params.id, 10));
-            const {id} = offer;
-
             return <Property
               place={offer}
-              nearPlaces={getNearOffersById(offers, id)}
+              nearPlaces={getNearOffersById(offers, offer)}
               reviews={reviews}
               onRequestComments={onLoadOfferReviews}
               user={user}
@@ -87,9 +85,10 @@ class App extends React.Component {
               onPostComment={onPostReview}
               ratings={ratings}
               isCommentSending={isSendingComment}
+              onFavoriteChange={onChangeFavorite}
             />;
           }}/>
-          <PrivateRoute path="/favorites" user={user} cities={cities} onLoadFavorites={onLoadFavorites} favorites={favorites} component={Favorites}/>
+          <PrivateRoute path="/favorites" component={Favorites} onRequestFavorites={onLoadFavorites} onFavoriteClick={onChangeFavorite} cities={cities} favorites={favorites} user={user}/>
         </Switch>
 
       </React.Fragment>

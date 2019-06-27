@@ -23,6 +23,7 @@ class Property extends React.Component {
     super(props);
 
     this._handleSelectOffer = this._handleSelectOffer.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +51,8 @@ class Property extends React.Component {
 
     const {
       id: propertyId,
-      isPremium = false,
+      is_premium: isPremium = false,
+      is_favorite: isFavorite = false,
       city = -1,
       title = ``,
       description = ``,
@@ -74,6 +76,8 @@ class Property extends React.Component {
       is_pro: isHostPro = false,
       avatar_url: hostAvatar = ``
     } = host;
+
+    const correctedAvatarUrl = hostAvatar.startsWith(`/`) ? hostAvatar : `/${hostAvatar}`;
 
     const {
       id: userId = -1,
@@ -100,8 +104,8 @@ class Property extends React.Component {
               ) : null}
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
-                <button className="property__bookmark-button button" type="button">
-                  <svg className="property__bookmark-icon" width="31" height="33">
+                <button className={`property__bookmark-button button ${isFavorite ? `property__bookmark-button--active` : ``}`} type="button" onClick={this._handleFavoriteClick}>
+                  <svg className="place-card__bookmark-icon property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"/>
                   </svg>
                   <span className="visually-hidden">To bookmarks</span>
@@ -133,7 +137,7 @@ class Property extends React.Component {
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
                   <div className={`property__avatar-wrapper user__avatar-wrapper${isHostPro ? ` property__avatar-wrapper--pro ` : ``}`}>
-                    <img className="property__avatar user__avatar" src={`/${hostAvatar}`} width="74" height="74" alt={hostName}/>
+                    <img className="property__avatar user__avatar" src={`${correctedAvatarUrl}`} width="74" height="74" alt={hostName}/>
                   </div>
                   <span className="property__user-name">{hostName}</span>
                   {isHostPro ? (<span className="property__user-status">Pro</span>) : null }
@@ -168,6 +172,20 @@ class Property extends React.Component {
 
   _handleSelectOffer() {
 
+  }
+
+  _handleFavoriteClick() {
+    const {
+      place,
+      onFavoriteChange
+    } = this.props;
+
+    const {
+      is_favorite: isFavorite,
+      id,
+    } = place;
+
+    onFavoriteChange(id, !isFavorite);
   }
 }
 
@@ -243,7 +261,8 @@ Property.propTypes = {
   })),
   isCommentSending: PropTypes.bool,
   onRequestComments: PropTypes.func,
-  onPostComment: PropTypes.func
+  onPostComment: PropTypes.func,
+  onFavoriteChange: PropTypes.func,
 };
 
 export default Property;

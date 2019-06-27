@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {getCityInfoById} from "../../utils";
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -9,16 +8,15 @@ class SignIn extends React.Component {
     this._handleSubmit = this._handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    document.body.classList.add(`page--login`);
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove(`page--login`);
+  }
+
   render() {
-    const {
-      cities = [],
-      currentCityId = -1,
-    } = this.props;
-
-    const {
-      name: cityName = ``
-    } = getCityInfoById(cities, currentCityId);
-
     return (
       <main className="page__main page__main--login">
         <div className="page__login-container container">
@@ -39,7 +37,7 @@ class SignIn extends React.Component {
           <section className="locations locations--login locations--current">
             <div className="locations__item">
               <a className="locations__item-link" href="#">
-                <span>{cityName}</span>
+                <span>Amsterdam</span>
               </a>
             </div>
           </section>
@@ -57,16 +55,6 @@ class SignIn extends React.Component {
 }
 
 SignIn.propTypes = {
-  currentCityId: PropTypes.number.isRequired,
-  cities: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    location: PropTypes.shape({
-      longitude: PropTypes.number,
-      latitude: PropTypes.number,
-      zoom: PropTypes.number
-    })
-  })),
   onSubmit: PropTypes.func.isRequired
 };
 

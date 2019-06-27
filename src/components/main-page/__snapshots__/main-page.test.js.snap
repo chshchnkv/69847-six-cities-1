@@ -212,7 +212,7 @@ exports[`Main page renders correctly 1`] = `
               </a>
             </div>
             <div
-              className="place-card__info"
+              className=" place-card__info"
             >
               <div
                 className="place-card__price-wrapper"
@@ -311,7 +311,7 @@ exports[`Main page renders correctly 1`] = `
               </a>
             </div>
             <div
-              className="place-card__info"
+              className=" place-card__info"
             >
               <div
                 className="place-card__price-wrapper"
@@ -410,7 +410,7 @@ exports[`Main page renders correctly 1`] = `
               </a>
             </div>
             <div
-              className="place-card__info"
+              className=" place-card__info"
             >
               <div
                 className="place-card__price-wrapper"
@@ -509,7 +509,7 @@ exports[`Main page renders correctly 1`] = `
               </a>
             </div>
             <div
-              className="place-card__info"
+              className=" place-card__info"
             >
               <div
                 className="place-card__price-wrapper"
@@ -608,7 +608,7 @@ exports[`Main page renders correctly 1`] = `
               </a>
             </div>
             <div
-              className="place-card__info"
+              className=" place-card__info"
             >
               <div
                 className="place-card__price-wrapper"
