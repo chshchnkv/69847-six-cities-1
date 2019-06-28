@@ -13,7 +13,7 @@ export const getOfferById = (offerList, offerId) => Array.isArray(offerList) ? o
 
 export const getOfferIndexById = (offerList, offerId) => Array.isArray(offerList) ? offerList.findIndex((offer) => offer.id === offerId) : -1;
 
-export const getNearOffersById = (offersList, offerId, maxNumber = 3) => Array.isArray(offersList) ? offersList.filter((offer) => offer.id !== offerId).slice(0, maxNumber) : [];
+export const getNearOffersById = (offersList, offer, maxNumber = 3) => Array.isArray(offersList) ? offersList.filter((offerItem) => offerItem.id !== offer.id && offerItem.city === offer.city).slice(0, maxNumber) : [];
 
 export const sortOffers = (offersList, sortOptions) => {
   const clone = offersList.slice(0);
@@ -31,6 +31,21 @@ export const sortOffers = (offersList, sortOptions) => {
     case SortField.RANK: {
       clone.sort((a, b) => (a.rating - b.rating) * orderMultiplier);
       break;
+    }
+    case SortField.CITY: {
+      clone.sort((a, b) => {
+        const {city: {name: nameA}} = a;
+        const {city: {name: nameB}} = b;
+        const cityNameA = nameA.toLowerCase().trim();
+        const cityNameB = nameB.toLowerCase().trim();
+        if (cityNameA === cityNameB) {
+          return 0;
+        } else if (cityNameA > cityNameB) {
+          return orderMultiplier;
+        } else {
+          return -1 * orderMultiplier;
+        }
+      });
     }
   }
   return clone;

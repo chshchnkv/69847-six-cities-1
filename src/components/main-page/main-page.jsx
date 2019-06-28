@@ -24,51 +24,63 @@ const CityListWithActiveItemWrapped = withActiveItem(withTransformProps((props) 
 
 const SortListWithOpened = withOpened(SortList);
 
-const MainPage = (props) => {
-  const {
-    cities,
-    cityId,
-    offers,
-    offerId,
-    onSelectOffer,
-    onChangeCity,
-    sort,
-    onSort,
-    onChangeFavorite,
-  } = props;
+class MainPage extends React.PureComponent {
+  componentDidMount() {
+    document.body.classList.add(`page--gray`);
+    document.body.classList.add(`page--main`);
+  }
 
-  const {
-    name,
-    location
-  } = getCityInfoById(cities, cityId);
+  componentWillUnmount() {
+    document.body.classList.remove(`page--gray`);
+    document.body.classList.remove(`page--main`);
+  }
 
-  return (
-    <main className="page__main page__main--index">
-      <h1 className="visually-hidden">Cities</h1>
-      <div className="cities tabs">
-        <section className="locations container">
-          <CityListWithActiveItemWrapped cities={cities} activeItem={cityId} onChangeActiveItem={onChangeCity}/>
-        </section>
-      </div>
+  render() {
+    const {
+      cities,
+      cityId,
+      offers,
+      offerId,
+      onSelectOffer,
+      onChangeCity,
+      sort,
+      onSort,
+      onChangeFavorite,
+    } = this.props;
 
-      <div className="cities__places-wrapper">
-        <div className="cities__places-container container">
-          <section className="cities__places places">
-            <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
-            <SortListWithOpened sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
-            <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer} onFavoriteClick={onChangeFavorite}/>
+    const {
+      name,
+      location
+    } = getCityInfoById(cities, cityId);
+
+    return (
+      <main className="page__main page__main--index">
+        <h1 className="visually-hidden">Cities</h1>
+        <div className="cities tabs">
+          <section className="locations container">
+            <CityListWithActiveItemWrapped cities={cities} activeItem={cityId} onChangeActiveItem={onChangeCity}/>
           </section>
-          <div className="cities__right-section">
-            <section className="cities__map map">
-              <Map location={location} pins={offers.map((offer) => offer.location)} activePin={offers.findIndex((offer) => offer.id === offerId)}/>
+        </div>
+
+        <div className="cities__places-wrapper">
+          <div className="cities__places-container container">
+            <section className="cities__places places">
+              <h2 className="visually-hidden">Places</h2>
+              <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {name}</b>
+              <SortListWithOpened sortOptions={sortOptions} activeSort={sort} onSort={onSort}/>
+              <OffersListWithActiveItemWrapped offers={offers} onChangeActiveItem={onSelectOffer} onFavoriteClick={onChangeFavorite}/>
             </section>
+            <div className="cities__right-section">
+              <section className="cities__map map">
+                <Map location={location} pins={offers.map((offer) => offer.location)} activePin={offers.findIndex((offer) => offer.id === offerId)}/>
+              </section>
+            </div>
           </div>
         </div>
-      </div>
-    </main>
-  );
-};
+      </main>
+    );
+  }
+}
 
 MainPage.propTypes = {
   cityId: PropTypes.number.isRequired,

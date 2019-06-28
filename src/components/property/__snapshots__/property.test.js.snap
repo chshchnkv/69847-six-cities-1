@@ -39,11 +39,12 @@ exports[` 1`] = `
             Wood and stone place
           </h1>
           <button
-            className="property__bookmark-button button"
+            className="property__bookmark-button button "
+            onClick={[Function]}
             type="button"
           >
             <svg
-              className="property__bookmark-icon"
+              className="place-card__bookmark-icon property__bookmark-icon"
               height="33"
               width="31"
             >

@@ -18,12 +18,14 @@ class App extends React.Component {
       cities,
       offers,
       reviews = [],
+      favorites = [],
       currentCityId,
       currentOfferId,
       currentCityOffers,
       onChangeCity,
       onSelectOffer,
       onLoadOfferReviews,
+      onLoadFavorites,
       onLogin,
       onPostReview,
       sort,
@@ -73,11 +75,9 @@ class App extends React.Component {
           <Route path="/login" render = {() => <SignIn cities={cities} currentCityId={currentCityId} onSubmit={onLogin}/>}/>
           <Route path="/offer/:id" render = {({match}) => {
             const offer = getOfferById(offers, parseInt(match.params.id, 10));
-            const {id} = offer;
-
             return <Property
               place={offer}
-              nearPlaces={getNearOffersById(offers, id)}
+              nearPlaces={getNearOffersById(offers, offer)}
               reviews={reviews}
               onRequestComments={onLoadOfferReviews}
               user={user}
@@ -85,9 +85,10 @@ class App extends React.Component {
               onPostComment={onPostReview}
               ratings={ratings}
               isCommentSending={isSendingComment}
+              onFavoriteChange={onChangeFavorite}
             />;
           }}/>
-          <PrivateRoute path="/favorites" user={user} render = {() => <Favorites/>}/>
+          <PrivateRoute path="/favorites" component={Favorites} onRequestFavorites={onLoadFavorites} onFavoriteClick={onChangeFavorite} cities={cities} favorites={favorites} user={user}/>
         </Switch>
 
       </React.Fragment>
@@ -141,6 +142,23 @@ App.propTypes = {
       latitude: PropTypes.number.isRequired
     })
   })).isRequired,
+  favorites: PropTypes.arrayOf(PropTypes.shape({
+    cityId: PropTypes.number,
+    offers: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      src: PropTypes.string,
+      rating: PropTypes.number,
+      price: PropTypes.number,
+      isPremium: PropTypes.bool,
+      type: PropTypes.oneOf([...Object.values(AccommodationType)]).isRequired,
+      location: PropTypes.shape({
+        city: PropTypes.number,
+        longitude: PropTypes.number.isRequired,
+        latitude: PropTypes.number.isRequired
+      })
+    }))
+  })),
   reviews: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     user: PropTypes.shape({
@@ -170,6 +188,7 @@ App.propTypes = {
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,
   onLoadOfferReviews: PropTypes.func,
+  onLoadFavorites: PropTypes.func,
   onPostReview: PropTypes.func,
   onSort: PropTypes.func,
   onChangeFavorite: PropTypes.func,
@@ -184,7 +203,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   user: state.user,
   reviews: state.reviews,
   sort: state.sort,
-  isSendingComment: state.isSendingComment
+  isSendingComment: state.isSendingComment,
+  favorites: state.favorites,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -197,6 +217,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onLoadOfferReviews: (offerId) => {
     dispatch(Operation.loadComments(offerId));
+  },
+  onLoadFavorites: () => {
+    return dispatch(Operation.loadFavorites());
   },
   onPostReview: (propertyId, rating, comment) => {
     return dispatch(Operation.postComment(propertyId, rating, comment));

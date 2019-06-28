@@ -2,8 +2,8 @@ import React from "react";
 import {Redirect, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 
-export const PrivateRoute = ({component: Component, user, ...rest}) => {
-  return (<Route {...rest} render = {(props) => {
+export const PrivateRoute = ({component: Component, user, exact, strict, path, ...rest}) => {
+  return (<Route exact={exact} strict={strict} path={path} render = {(props) => {
     const {id = -1} = user;
 
     if (id < 0) {
@@ -14,15 +14,18 @@ export const PrivateRoute = ({component: Component, user, ...rest}) => {
         }
       }}/>);
     } else {
-      return (<Component {...props}/>);
+      return (<Component {...rest} {...props}/>);
     }
   }}
   />);
 };
 
 PrivateRoute.propTypes = {
-  component: PropTypes.shape(),
+  component: PropTypes.any,
   user: PropTypes.shape(),
+  exact: PropTypes.any,
+  strict: PropTypes.any,
+  path: PropTypes.any,
   location: PropTypes.shape({
     longitude: PropTypes.number,
     latitude: PropTypes.number,

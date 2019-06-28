@@ -16,7 +16,8 @@ export const urlSortOrder = `order`;
 export const SortField = {
   ID: `id`,
   PRICE: `price`,
-  RANK: `rank`
+  RANK: `rank`,
+  CITY: `city`
 };
 
 export const SortOrder = {
