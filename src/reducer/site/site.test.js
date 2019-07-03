@@ -1,5 +1,5 @@
-import {AccommodationType} from "./data";
-import {Action, reducer} from "./reducer";
+import {AccommodationType} from "../../data";
+import {Action, reducer} from "../index";
 
 const initialState = {
   cityId: 1,
@@ -147,4 +147,8 @@ it(`Reducer correctly changes offers`, () => {
   const newState = reducer(initialState, actionRequestOffers);
   expect(newState.offers).toHaveLength(4);
   expect(newState.offers[0].title).toEqual(`Le Village Montmartre`);
+});
+
+it(`Reducer correctly set cities`, () => {
+
 });

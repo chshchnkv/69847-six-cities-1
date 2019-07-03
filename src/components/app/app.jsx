@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import {AccommodationType, ratings} from "../../data";
 import MainPage from "../main-page/main-page";
-import {Action, ActionCreator, Operation} from "../../reducer";
+import {Action as SiteAction, ActionCreator as SiteActionCreator} from "../../reducer/site/site";
+import {Operation as DataOperation} from "../../reducer/data/data";
+import {Operation as UserOperation} from "../../reducer/user/user";
 import {connect} from "react-redux";
 import {getNearOffersById, getOfferById, getOffersByCityId, setSortOptionsToUrl} from "../../utils";
 import SignIn from "../sign-in/sign-in";
@@ -15,11 +17,11 @@ import history from "../../history";
 class App extends React.Component {
   render() {
     const {
-      cities,
-      offers,
+      cities = [],
+      offers = [],
       reviews = [],
       favorites = [],
-      currentCityId,
+      currentCityId = -1,
       currentOfferId,
       currentCityOffers,
       onChangeCity,
@@ -35,7 +37,7 @@ class App extends React.Component {
       isSendingComment
     } = this.props;
 
-    if (cities.length === 0 || offers.length === 0) {
+    if (currentCityId < 0 || cities.length === 0 || offers.length === 0) {
       return null;
     }
 
@@ -195,48 +197,48 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  offers: state.offers,
-  cities: state.cities,
-  currentCityId: state.cityId,
-  currentOfferId: state.offerId,
-  currentCityOffers: getOffersByCityId(state.offers, state.cityId),
-  user: state.user,
-  reviews: state.reviews,
-  sort: state.sort,
-  isSendingComment: state.isSendingComment,
-  favorites: state.favorites,
+  offers: state.data.offers,
+  cities: state.data.cities,
+  currentCityId: state.site.cityId,
+  currentOfferId: state.site.offerId,
+  currentCityOffers: getOffersByCityId(state.data.offers, state.site.cityId),
+  user: state.user.user,
+  reviews: state.data.reviews,
+  sort: state.data.sort,
+  isSendingComment: state.data.isSendingComment,
+  favorites: state.data.favorites,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeCity: (cityId) => {
-    dispatch(ActionCreator[Action.CHANGE_CITY](cityId));
-    dispatch(ActionCreator[Action.CHANGE_OFFER](-1));
+    dispatch(SiteActionCreator[SiteAction.CHANGE_CITY](cityId));
+    dispatch(SiteActionCreator[SiteAction.CHANGE_OFFER](-1));
   },
   onSelectOffer: (offerId) => {
-    dispatch(ActionCreator[Action.CHANGE_OFFER](offerId));
+    dispatch(SiteActionCreator[SiteAction.CHANGE_OFFER](offerId));
   },
   onLoadOfferReviews: (offerId) => {
-    dispatch(Operation.loadComments(offerId));
+    dispatch(DataOperation.loadComments(offerId));
   },
   onLoadFavorites: () => {
-    return dispatch(Operation.loadFavorites());
+    return dispatch(DataOperation.loadFavorites());
   },
   onPostReview: (propertyId, rating, comment) => {
-    return dispatch(Operation.postComment(propertyId, rating, comment));
+    return dispatch(DataOperation.postComment(propertyId, rating, comment));
   },
   onLogin: (email, password) => {
-    dispatch(Operation.login(email, password));
+    dispatch(UserOperation.login(email, password));
   },
   onLogout: () => {
-    dispatch(Operation.logout());
+    dispatch(UserOperation.logout());
   },
   onSort: (sortOptions) => {
-    dispatch(Operation.sortOffers(sortOptions));
+    dispatch(DataOperation.sortOffers(sortOptions));
     const url = `${window.location.pathname}?${setSortOptionsToUrl(window.location, sortOptions)}`;
     history.replace(url);
   },
   onChangeFavorite: (propertyId, isFavorite) => {
-    dispatch(Operation.postFavorite(propertyId, isFavorite));
+    dispatch(DataOperation.postFavorite(propertyId, isFavorite));
   }
 });
 
